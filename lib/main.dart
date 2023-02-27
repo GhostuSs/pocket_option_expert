@@ -7,7 +7,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox<bool>('paywall');
   await Hive.openBox<bool>('premium');
-  if(Hive.box<bool>('premium').isEmpty)await Hive.box<bool>('premium').put('paywall', false);
-  if(Hive.box<bool>('paywall').isEmpty)await Hive.box<bool>('paywall').put('paywall', false);
+  if(Hive.box<bool>('premium').isEmpty==true)await Hive.box<bool>('premium').put('premium', false);
+  if(Hive.box<bool>('paywall').isEmpty==true)await Hive.box<bool>('paywall').put('paywall', false);
   runApp(const EntryPoint());
 }

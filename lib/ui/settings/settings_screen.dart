@@ -1,7 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pocket_option_expert/res/base_urls.dart';
+import 'package:pocket_option_expert/ui/difficulty/difficulty_screen.dart';
 import 'package:pocket_option_expert/ui/paywall/paywall.dart';
 import 'package:pocket_option_expert/ui/settings/uikit/difficulty.dart';
 import 'package:pocket_option_expert/ui/settings/uikit/setting_button.dart';
@@ -16,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
     padding: EdgeInsets.symmetric(horizontal: 16,vertical: 32),
     child: Column(
       children: [
-        MainButton(label: 'GET PREMIUM FOR \$0.99', onTap: ()=>Navigator.push(context, PageTransition<Widget>(child:PaywallScreen(),type:PageTransitionType.rightToLeft))),
+        MainButton(label: r'GET PREMIUM FOR $0.99', onTap: ()=>Navigator.push(context, PageTransition<Widget>(child:PaywallScreen(),type:PageTransitionType.rightToLeft))),
         Padding(
           padding: EdgeInsets.symmetric(vertical: 16),
           child: Row(
@@ -29,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         SettingButton(label: 'Support', onTap: ()=>launchUrlString(BaseUrls.support)),
         SizedBox(height: 23,),
-        DiffButton(label: 'CHOICE OF DIFFICULTY LEVEL', onTap: (){})
+        DiffButton(label: 'CHOICE OF DIFFICULTY LEVEL', onTap: ()=>Navigator.push(context, PageTransition<Widget>(child: DifficultyScreen(), type: PageTransitionType.rightToLeft)))
       ],
     ),
   );

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -33,7 +35,7 @@ class PaywallScreen extends StatelessWidget {
                 child: Icon(Icons.clear,color: AppColors.white,),
               ),
             ),
-            Align(alignment: Alignment.center,child: Container(
+            Align(child: SizedBox(
               height: 100.h,
               child: Stack(
                 children: [
@@ -53,15 +55,18 @@ class PaywallScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MainButton(label: 'Get premium for \$0.99', onTap: () async =>await Hive.box<bool>('premium').put('premium',true).then((value) => Navigator.push(context, PageTransition<Widget>(child: HomeScreen(),type: PageTransitionType.rightToLeft)))),
-                  SizedBox(height: 24.h,),
-                  Padding(
-                    padding:EdgeInsets.symmetric(horizontal:5.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap:()=>launchUrlString(BaseUrls.terms),
+                  MainButton(label: r'Get premium for $0.99', onTap: ()async{
+                    await Hive.box<bool>('premium').put('premium',true);
+                    Navigator.push(context, PageTransition<Widget>(child: HomeScreen(),type: PageTransitionType.rightToLeft,));
+                  }),
+                SizedBox(height: 24.h,),
+                Padding(
+                padding:EdgeInsets.symmetric(horizontal:5.w),
+                child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                InkWell(
+                onTap:()=>launchUrlString(BaseUrls.terms),
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,

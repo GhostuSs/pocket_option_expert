@@ -1,12 +1,16 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/profile/ui/profile_screen.dart';
+import 'package:pocket_option_expert/ui/quiz/quiz_screen.dart';
 import 'package:pocket_option_expert/ui/settings/settings_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget{
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -16,9 +20,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currInd = 0;
   List<Widget> screens = [
-    Column(),
-    Column(),
-    SettingsScreen(),
+    const QuizScreen(),
+    const ProfileScreen(),
+    const SettingsScreen(),
   ];
 
   @override
@@ -30,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: CustAppBar(),
+          appBar: currInd!=0 ? CustAppBar() : null,
           bottomNavigationBar: ClipRRect(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -82,12 +86,27 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustAppBar({super.key, this.showLabels, this.seconds});
+  final bool? showLabels;
+  final int? seconds;
+
   @override
   Widget build(BuildContext context) => ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: AppBar(
             automaticallyImplyLeading: false,
+            leading: showLabels==true ? RichText(text: TextSpan(text: seconds.toString(),style: AppTypography.mainStyle.copyWith(
+  fontSize: 16.5.w,
+  fontWeight: FontWeight.w500,
+  color: AppColors.white,
+  ),children: [
+              TextSpan(text: 'Sec',style: AppTypography.mainStyle.copyWith(
+  fontSize: 16.5.w,
+  fontWeight: FontWeight.w500,
+  color: AppColors.white.withOpacity(0.5),
+  ),),
+            ])) :null,
             backgroundColor: Color.fromRGBO(18, 28, 35, 0.3),
             title: RichText(
                 text: TextSpan(
