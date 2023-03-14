@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/base_urls.dart';
 import 'package:pocket_option_expert/res/colors.dart';
@@ -31,7 +31,7 @@ class PaywallScreen extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: InkWell(
-                onTap: ()=>Navigator.push(context, PageTransition<Widget>(child: HomeScreen(),type: PageTransitionType.rightToLeft)),
+                onTap: ()=>Get.to<void>(HomeScreen.new),
                 child: Icon(Icons.clear,color: AppColors.white,),
               ),
             ),
@@ -57,7 +57,7 @@ class PaywallScreen extends StatelessWidget {
                 children: [
                   MainButton(label: r'Get premium for $0.99', onTap: ()async{
                     await Hive.box<bool>('premium').put('premium',true);
-                    Navigator.push(context, PageTransition<Widget>(child: HomeScreen(),type: PageTransitionType.rightToLeft,));
+                    await Get.to<void>(HomeScreen.new);
                   }),
                 SizedBox(height: 24.h,),
                 Padding(

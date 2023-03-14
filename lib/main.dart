@@ -9,5 +9,5 @@ Future<void> main() async {
   await Hive.openBox<bool>('premium');
   if(Hive.box<bool>('premium').isEmpty==true)await Hive.box<bool>('premium').put('premium', false);
   if(Hive.box<bool>('paywall').isEmpty==true)await Hive.box<bool>('paywall').put('paywall', false);
-  runApp(const EntryPoint());
+  runApp(const EntryPoint(),);
 }

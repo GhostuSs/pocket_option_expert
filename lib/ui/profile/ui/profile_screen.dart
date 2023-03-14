@@ -6,15 +6,24 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-        child: Column(
-          children: const [
-            ProfileWidget(label: 'EASY QUIZ', points: 0),
-          ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('assets/images/bg.png'),
+            fit: BoxFit.fill
         ),
       ),
-    );
+      child: Scaffold(
+        body: SafeArea(
+          minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          child: Column(
+            children: const [
+              ProfileWidget(label: 'EASY QUIZ', points: 0),
+            ],
+          ),
+        ),
+      ),
+    )
+      ;
   }
 }

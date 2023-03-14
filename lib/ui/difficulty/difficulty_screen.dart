@@ -7,6 +7,7 @@ import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 import 'package:pocket_option_expert/ui/home/home_screen.dart';
 import 'package:pocket_option_expert/ui/settings/uikit/difficulty.dart';
+import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
 
 class DifficultyScreen extends StatefulWidget {
   const DifficultyScreen({Key? key}) : super(key: key);
@@ -28,45 +29,6 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
     child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: const CustAppBar(),
-      bottomNavigationBar: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          child: BottomNavigationBar(
-            showUnselectedLabels: false,
-            selectedItemColor: AppColors.blue,
-            currentIndex: currInd,
-            onTap: (ind) => setState(() => currInd = ind),
-            backgroundColor: const Color.fromRGBO(18, 28, 35, 0.3),
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/quiz.svg',
-                  color: selector(currInd == 0),
-                ),
-                label: 'Quiz',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/profile.svg',
-                  color: selector(currInd == 1),
-                ),
-                label: 'Profile',
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  'assets/images/settings.svg',
-                  color: selector(currInd == 2),
-                ),
-                label: 'Settings',
-              ),
-            ],
-            selectedLabelStyle: AppTypography.mainStyle.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 10.w,
-                color: AppColors.blue),
-          ),
-        ),
-      ),
       body: SafeArea(
         minimum: const EdgeInsets.symmetric(horizontal: 16,vertical: 32),
         child: Column(

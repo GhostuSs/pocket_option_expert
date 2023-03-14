@@ -30,20 +30,18 @@ dependencies:
   flutter_screenutil: ^5.6.1
   json_serializable: ^6.6.1
   intl: ^0.17.0
-  flutter_bloc: ^8.1.1
   hive: ^2.2.3
-  bloc: ^8.1.0
   path_provider: ^2.0.12
   json_annotation: ^4.8.0
   flutter_svg_provider: ^1.0.3
-  page_transition: ^2.0.9
   hive_flutter: ^1.1.0
   url_launcher: ^6.1.9
   flutter_svg: ^1.1.6
   simple_star_rating: ^0.0.3
+  persistent_bottom_nav_bar_v2: ^4.2.6
+  get: ^4.6.5
 
 dev_dependencies:
-  dart_code_metrics: ^5.4.0
   flutter_test:
     sdk: flutter
   surf_lint_rules: ^1.0.0
