@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:pocket_option_expert/res/base_urls.dart';
 import 'package:pocket_option_expert/ui/difficulty/difficulty_screen.dart';
 import 'package:pocket_option_expert/ui/paywall/paywall.dart';
@@ -64,7 +65,8 @@ class SettingsScreen extends StatelessWidget {
                 DiffButton(
                     label: 'CHOICE OF DIFFICULTY LEVEL',
                     isSelected: true,
-                    onTap: () => Get.to<void>(DifficultyScreen.new))
+                    onTap: () => pushNewScreen<void>(context,screen:DifficultyScreen()),
+                )
               ],
             ),
           ),

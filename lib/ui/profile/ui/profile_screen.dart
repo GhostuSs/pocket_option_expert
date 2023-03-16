@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_option_expert/ui/profile/uikit/profile_widget.dart';
+import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
+        appBar:const CustAppBar(),
         body: SafeArea(
           minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Column(

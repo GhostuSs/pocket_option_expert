@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:pocket_option_expert/ui/home/home_screen.dart';
 import 'package:pocket_option_expert/ui/shop/ui/shop_screen.dart';
 import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
@@ -28,7 +29,7 @@ class _QuizScreenState extends State<QuizScreen> {
       seconds: 120,
       showLabels: true,
       action: InkWell(
-        onTap: ()=>Get.to<void>(()=>ShopScreen()),
+        onTap: ()=>pushNewScreen<void>(context, screen: const ShopScreen()),
         child: Center(
           child: SvgPicture.asset('assets/images/shop.svg'),
         ),

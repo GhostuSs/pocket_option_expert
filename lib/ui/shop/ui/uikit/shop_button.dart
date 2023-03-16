@@ -12,38 +12,46 @@ class ShopButton extends StatelessWidget {
     required this.label,
     required this.description,
     required this.price,
+    required this.isSelected,
   }) : super(key: key);
   final VoidCallback onTap;
   final String label;
+  final bool isSelected;
   final String description;
   final int price;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      borderRadius: BorderRadius.circular(100),
+      onTap: isSelected ? null :onTap,
       child: ClipRRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaY: 8, sigmaX: 8,),
+          filter: ImageFilter.blur(
+            sigmaY: 8,
+            sigmaX: 8,
+          ),
           child: Container(
-            constraints: BoxConstraints.expand(height: 120.h),
+            constraints: BoxConstraints.expand(height: 110.h),
             decoration: BoxDecoration(
               color: AppColors.white.withOpacity(0.1),
               border: Border.all(
-                color: AppColors.blue.withOpacity(0.3),
-                width: 1.w,
+                color: AppColors.blue.withOpacity(isSelected ? 1.0 : 0.3),
+                width: isSelected ? 2.w : 1.w,
               ),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 16,
+                SizedBox(
+                  height: 10.h,
                 ),
                 Container(
-                  constraints: BoxConstraints.expand(width: 85.w,height: 38.h,),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 17.w, vertical: 10.h,),
+                  width: 100.w,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 17.w,
+                    vertical: 10.h,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                     color: AppColors.blue,
@@ -67,29 +75,32 @@ class ShopButton extends StatelessWidget {
                   child: Text(
                     description,
                     style: AppTypography.mainStyle.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.white.withOpacity(0.5)),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.white.withOpacity(0.5),
+                    ),
                   ),
                 ),
                 RichText(
-                    text: TextSpan(
-                        text: price.toString(),
-                        style: AppTypography.mainStyle.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.sp,
-                          color: AppColors.white,
-                        ),
-                        children: [
+                  text: TextSpan(
+                    text: price.toString(),
+                    style: AppTypography.mainStyle.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                      color: AppColors.white,
+                    ),
+                    children: [
                       TextSpan(
-                        text: 'Coins',
+                        text: ' Coins',
                         style: AppTypography.mainStyle.copyWith(
                           fontWeight: FontWeight.w400,
                           fontSize: 16.sp,
                           color: AppColors.blue,
                         ),
-                      )
-                    ]))
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
