@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 import 'package:pocket_option_expert/ui/profile/ui/profile_screen.dart';
 import 'package:pocket_option_expert/ui/quiz/quiz_screen.dart';
@@ -91,26 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InkWell(
-                    onTap: () => persController.jumpToTab(0),
-                    child: SvgPicture.asset(
-                      'assets/images/quiz.svg',
-                      color: selector(persController.index == 0),
-                    ),
-                  ),
-                  InkWell(
-                      onTap: () => persController.jumpToTab(1),
-                      child: SvgPicture.asset(
-                        'assets/images/profile.svg',
-                        color: selector(persController.index == 1),
-                      )),
-                  InkWell(
-                    onTap: () => persController.jumpToTab(2),
-                    child: SvgPicture.asset(
-                      'assets/images/settings.svg',
-                      color: selector(persController.index == 2),
-                    ),
-                  ),
+                  CustomBtmWidget(onTap: () => persController.jumpToTab(0), path: 'assets/images/quiz.svg', selected: persController.index == 0, label: 'Quiz',),
+                  CustomBtmWidget(onTap: () => persController.jumpToTab(1), path: 'assets/images/profile.svg', selected: persController.index == 1, label: 'Profile',),
+                  CustomBtmWidget(onTap: () => persController.jumpToTab(2), path: 'assets/images/settings.svg', selected: persController.index == 2, label: 'Settings',),
                 ],
               ),
             ),
@@ -121,6 +106,36 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+}
+
+class CustomBtmWidget extends StatelessWidget {
+  final VoidCallback onTap;
+  final String path;
+  final bool selected;
+  final String label;
+  const CustomBtmWidget({Key? key, required this.onTap, required this.path, required this.selected, required this.label,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            path,
+            color: selector(selected),
+          ),
+          if(selected)SizedBox(height: 6.sp,),
+          if(selected)Text(label,style: AppTypography.mainStyle.copyWith(
+            fontSize: 12.sp,
+            color: AppColors.blue,
+            fontWeight: FontWeight.w500,
+          ),)
+        ],
+      ),
+    );
+  }
   Color selector(bool isSelected) {
     return isSelected ? AppColors.blue : AppColors.blue.withOpacity(0.5);
   }

@@ -4,8 +4,17 @@ import 'package:pocket_option_expert/domain/models/quiz_history/quiz_his_model.d
 part 'user.g.dart';
 
 @HiveType(typeId: 1)
-class UserModel extends HiveObject{
-  UserModel({this.difficultyLevel,this.fiftyFifty,this.removeInc,this.show,this.easy,this.normal,this.hard,});
+class UserModel extends HiveObject {
+  UserModel({
+    this.difficultyLevel,
+    this.fiftyFifty,
+    this.removeInc,
+    this.show,
+    this.easy,
+    this.normal,
+    this.hard,
+    this.balance,
+  });
   @HiveField(0)
   String? difficultyLevel;
   @HiveField(1)
@@ -20,4 +29,6 @@ class UserModel extends HiveObject{
   QuizHistory? normal;
   @HiveField(6)
   QuizHistory? hard;
+  @HiveField(7)
+  int? balance;
 }

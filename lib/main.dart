@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pocket_option_expert/domain/models/quiz_question/quiz_question_model.dart';
 import 'package:pocket_option_expert/domain/models/user/user.dart';
 import 'package:pocket_option_expert/ui/entrypoint.dart';
 
