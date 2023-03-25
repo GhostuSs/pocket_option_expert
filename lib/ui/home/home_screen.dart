@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final PersistentTabController persController = PersistentTabController();
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Container(
@@ -39,45 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: persController.index != 0 ? const CustAppBar() : null,
-          // bottomNavigationBar: ClipRRect(
-          //   child: BackdropFilter(
-          //     filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          //     child: BottomNavigationBar(
-          //       showUnselectedLabels: false,
-          //       selectedItemColor: AppColors.blue,
-          //       currentIndex: persController.index,
-          //       onTap: (ind) => setState(() => persController.index = ind),
-          //       backgroundColor: Color.fromRGBO(18, 28, 35, 0.3),
-          //       items: [
-          //         BottomNavigationBarItem(
-          //           icon: SvgPicture.asset(
-          //             'assets/images/quiz.svg',
-          //             color: selector(persController.index == 0),
-          //           ),
-          //           label: 'Quiz',
-          //         ),
-          //         BottomNavigationBarItem(
-          //           icon: SvgPicture.asset(
-          //             'assets/images/profile.svg',
-          //             color: selector(persController.index == 1),
-          //           ),
-          //           label: 'Profile',
-          //         ),
-          //         BottomNavigationBarItem(
-          //           icon: SvgPicture.asset(
-          //             'assets/images/settings.svg',
-          //             color: selector(persController.index == 2),
-          //           ),
-          //           label: 'Settings',
-          //         ),
-          //       ],
-          //       selectedLabelStyle: AppTypography.mainStyle.copyWith(
-          //           fontWeight: FontWeight.w500,
-          //           fontSize: 10.w,
-          //           color: AppColors.blue),
-          //     ),
-          //   ),
-          // ),
           body: PersistentTabView.custom(
             context,
             backgroundColor: const Color.fromRGBO(
@@ -93,9 +54,24 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomBtmWidget(onTap: () => persController.jumpToTab(0), path: 'assets/images/quiz.svg', selected: persController.index == 0, label: 'Quiz',),
-                  CustomBtmWidget(onTap: () => persController.jumpToTab(1), path: 'assets/images/profile.svg', selected: persController.index == 1, label: 'Profile',),
-                  CustomBtmWidget(onTap: () => persController.jumpToTab(2), path: 'assets/images/settings.svg', selected: persController.index == 2, label: 'Settings',),
+                  CustomBtmWidget(
+                    onTap: () => persController.jumpToTab(0),
+                    path: 'assets/images/quiz.svg',
+                    selected: persController.index == 0,
+                    label: 'Quiz',
+                  ),
+                  CustomBtmWidget(
+                    onTap: () => persController.jumpToTab(1),
+                    path: 'assets/images/profile.svg',
+                    selected: persController.index == 1,
+                    label: 'Profile',
+                  ),
+                  CustomBtmWidget(
+                    onTap: () => persController.jumpToTab(2),
+                    path: 'assets/images/settings.svg',
+                    selected: persController.index == 2,
+                    label: 'Settings',
+                  ),
                 ],
               ),
             ),
@@ -105,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 }
 
 class CustomBtmWidget extends StatelessWidget {
@@ -113,7 +88,13 @@ class CustomBtmWidget extends StatelessWidget {
   final String path;
   final bool selected;
   final String label;
-  const CustomBtmWidget({Key? key, required this.onTap, required this.path, required this.selected, required this.label,}) : super(key: key);
+  const CustomBtmWidget({
+    Key? key,
+    required this.onTap,
+    required this.path,
+    required this.selected,
+    required this.label,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -126,16 +107,24 @@ class CustomBtmWidget extends StatelessWidget {
             path,
             color: selector(selected),
           ),
-          if(selected)SizedBox(height: 6.sp,),
-          if(selected)Text(label,style: AppTypography.mainStyle.copyWith(
-            fontSize: 12.sp,
-            color: AppColors.blue,
-            fontWeight: FontWeight.w500,
-          ),)
+          if (selected)
+            SizedBox(
+              height: 6.sp,
+            ),
+          if (selected)
+            Text(
+              label,
+              style: AppTypography.mainStyle.copyWith(
+                fontSize: 12.sp,
+                color: AppColors.blue,
+                fontWeight: FontWeight.w500,
+              ),
+            )
         ],
       ),
     );
   }
+
   Color selector(bool isSelected) {
     return isSelected ? AppColors.blue : AppColors.blue.withOpacity(0.5);
   }

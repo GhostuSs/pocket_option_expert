@@ -46,6 +46,7 @@ class QuizButton extends StatelessWidget {
                 child: Center(
                   child: Text(
                     label,
+                    textAlign: TextAlign.center,
                     style: AppTypography.mainStyle.copyWith(
                       color: AppColors.white,
                       fontSize: 20.sp,
