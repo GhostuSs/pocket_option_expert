@@ -158,33 +158,26 @@ class QuizController extends GetxController {
       ),
     );
     final _user = Hive.box<UserModel>('user').values.first;
-    final currRes = currQuiz.length - correct;
     switch (difficulty.toLowerCase()) {
       case 'easy':
         _user.easy = QuizHistory(
           name: 'easy',
-          currRes: currRes >= (_user.easy?.currRes ?? 0)
-              ? currRes
-              : _user.easy?.currRes,
-          prelastRes: _user.easy?.currRes,
+          currRes: _getCurrBest(historyData: _user.easy)?.currRes,
+          prelastRes: _getPreLastBest(historyData: _user.easy)?.prelastRes,
         );
         break;
       case 'normal':
         _user.normal = QuizHistory(
           name: 'normal',
-          currRes: currRes >= (_user.normal?.currRes ?? 0)
-              ? currRes
-              : _user.normal?.currRes,
-          prelastRes: _user.normal?.currRes,
+          currRes: _getCurrBest(historyData: _user.normal)?.currRes,
+          prelastRes: _getPreLastBest(historyData: _user.normal)?.prelastRes,
         );
         break;
       case 'hard':
         _user.hard = QuizHistory(
           name: 'hard',
-          currRes: currRes >= (_user.hard?.currRes ?? 0)
-              ? currRes
-              : _user.hard?.currRes,
-          prelastRes: _user.hard?.currRes,
+          currRes: _getCurrBest(historyData: _user.hard)?.currRes,
+          prelastRes: _getPreLastBest(historyData: _user.hard)?.prelastRes,
         );
         break;
     }
@@ -300,6 +293,39 @@ class QuizController extends GetxController {
     await onAnswerChosen(
         selectedIndx: currQuiz[currQuestionIndex.value].correct! - 1,
         context: context);
+  }
+
+  QuizHistory? _getCurrBest({required QuizHistory? historyData}){
+    //TODO: Correct
+    QuizHistory? history = historyData;
+    if (kDebugMode) {
+      print(correct);
+    }
+    int currentValue = correct;
+    print(currentValue);
+    if((historyData?.currRes ?? 0)<currentValue){
+      history?..prelastRes=historyData?.currRes
+      ..currRes=currentValue;
+      return history;
+    }
+    return history;
+  }
+
+  QuizHistory? _getPreLastBest({required QuizHistory? historyData}){
+    //TODO: Correct
+    QuizHistory? history = historyData;
+    int currentValue = correct;
+    print(currentValue);
+    if((historyData?.prelastRes ?? 0)<currentValue){
+      history?.prelastRes=currentValue;
+      return history;
+    }else{
+      if((historyData?.currRes ?? 0)>currentValue){
+        history?.prelastRes=historyData?.currRes;
+      }
+      print('else prelase');
+    }
+    return history;
   }
 }
 

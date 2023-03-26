@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
-
+//TODO: Correct
 class QuizHistoryCard extends StatelessWidget {
   const QuizHistoryCard({
     Key? key,
@@ -60,7 +60,7 @@ class QuizHistoryCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '${points == 0 ? points : 8 - points}/8',
+                            '$points/8',
                             style: AppTypography.mainStyle.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w900,
