@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/difficulty/difficulty_screen.dart';
 import 'package:pocket_option_expert/ui/quiz/state/quiz_controller.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/helper_widget.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/quiz_button.dart';
@@ -28,7 +29,7 @@ class QuizScreen extends StatelessWidget {
         builder: (obj) => Obx(() => Scaffold(
               backgroundColor: Colors.transparent,
               appBar: CustAppBar(
-                seconds:_controller.time.value,
+                seconds: _controller.time.value,
                 showLabels: true,
                 action: InkWell(
                   onTap: () =>
@@ -72,12 +73,20 @@ class QuizScreen extends StatelessWidget {
                           label: _controller
                               .currQuiz[_controller.currQuestionIndex.value]
                               .answers![i],
+                          locker: i + 1 ==
+                                  _controller
+                                      .currQuiz[
+                                          _controller.currQuestionIndex.value]
+                                      .correct &&
+                              _controller.lock.value,
                           state: _controller.answersState[i],
                           onTap: () async {
-                            await _controller.onAnswerChosen(
-                              selectedIndx: i,
-                              context: context,
-                            );
+                            if (!_controller.lock.value) {
+                              await _controller.onAnswerChosen(
+                                selectedIndx: i,
+                                context: context,
+                              );
+                            }
                           }),
                     const Spacer(),
                     Row(
@@ -89,12 +98,16 @@ class QuizScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  '${_controller.difficulty} level',
-                                  style: AppTypography.mainStyle.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18.sp,
-                                    color: AppColors.white,
+                                InkWell(
+                                  onTap: () => _controller.timer!=null ? _controller.showLeaveDialog(context: context) :pushNewScreen<void>(context,
+                                    screen: const DifficultyScreen(),),
+                                  child: Text(
+                                    '${_controller.difficulty} level',
+                                    style: AppTypography.mainStyle.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 17.sp,
+                                      color: AppColors.white,
+                                    ),
                                   ),
                                 ),
                                 const RotatedBox(
@@ -103,31 +116,33 @@ class QuizScreen extends StatelessWidget {
                                     Icons.arrow_drop_down_rounded,
                                     color: AppColors.white,
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             Text(
                               '${_controller.currQuestionIndex.value + 1}/${_controller.currQuiz.value.length}',
                               style: AppTypography.mainStyle.copyWith(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 32.sp,
+                                fontSize: 30.sp,
                                 color: AppColors.white,
                               ),
                             ),
                           ],
                         ),
                         const Spacer(),
-                        const HelperWidget(
+                        if((_controller.userData.value.removeInc ?? 0)>0)HelperWidget(
                           label: '75/25',
+                          onTap: _controller.removeIncorrectAnswer,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                        if((_controller.userData.value.fiftyFifty ?? 0)>0)Padding(
+                          padding: EdgeInsets.symmetric(horizontal:8.sp),
                           child: HelperWidget(
                             label: '50/50',
-                          ),
-                        ),
-                        const HelperWidget(
+                            onTap: _controller.useFiftyFifty,
+                          ))else SizedBox(width:16.sp),
+                        if((_controller.userData.value.show ?? 0)>0)HelperWidget(
                           label: 'SHOW',
+                          onTap: () async =>_controller.showCorrectAnswer(context: context),
                         ),
                       ],
                     ),

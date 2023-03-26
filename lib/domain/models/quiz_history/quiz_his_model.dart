@@ -11,9 +11,9 @@ class QuizHistory extends HiveObject {
   });
 
   @HiveField(0)
-  String? name;
+  final String? name;
   @HiveField(1)
-  int? currRes;
+  final int? currRes;
   @HiveField(2)
-  int? prelastRes;
+  final int? prelastRes;
 }

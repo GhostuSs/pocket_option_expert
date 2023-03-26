@@ -24,13 +24,14 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       easy: fields[4] as QuizHistory?,
       normal: fields[5] as QuizHistory?,
       hard: fields[6] as QuizHistory?,
+      balance: fields[7] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.difficultyLevel)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(5)
       ..write(obj.normal)
       ..writeByte(6)
-      ..write(obj.hard);
+      ..write(obj.hard)
+      ..writeByte(7)
+      ..write(obj.balance);
   }
 
   @override

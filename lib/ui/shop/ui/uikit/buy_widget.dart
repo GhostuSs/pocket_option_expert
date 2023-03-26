@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/shop/state/shop_controller.dart';
 
 class BuyWidget extends StatelessWidget {
   const BuyWidget({
@@ -30,7 +32,7 @@ class BuyWidget extends StatelessWidget {
             isIncrement: true,
           ),
         ),
-        _BuyButton(onTap: () {}, quantity: quantity)
+        _BuyButton(onTap: ()=>Get.find<ShopController>().buy(), quantity: quantity)
       ],
     );
   }

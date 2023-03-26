@@ -9,12 +9,13 @@ class QuizButton extends StatelessWidget {
   final String label;
   final AnswerState state;
   final VoidCallback onTap;
+  final bool locker;
 
   const QuizButton({
     Key? key,
     required this.label,
     required this.state,
-    required this.onTap,
+    required this.onTap, required this.locker,
   }) : super(key: key);
 
   @override
@@ -37,26 +38,35 @@ class QuizButton extends StatelessWidget {
                 sigmaY: 5,
               ),
               child: Container(
-                padding: EdgeInsets.all(20.sp),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    100.r,
-                  ),
-                  color: _colorSelector(),
+                  borderRadius: BorderRadius.circular(100),
                   border: Border.all(
-                    color: AppColors.blue.withOpacity(
-                      0.3,
+                    width: 1.5,
+                    color: locker ? AppColors.green : Colors.transparent,
+                  )
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(20.sp),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      100.r,
+                    ),
+                    color: _colorSelector(),
+                    border: Border.all(
+                      color: AppColors.blue.withOpacity(
+                        0.3,
+                      ),
                     ),
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: AppTypography.mainStyle.copyWith(
-                      color: AppColors.white,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w500,
+                  child: Center(
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      style: AppTypography.mainStyle.copyWith(
+                        color: AppColors.white,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),

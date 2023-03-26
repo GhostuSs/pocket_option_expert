@@ -7,11 +7,12 @@ import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
-class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({Key? key, required this.label, required this.points})
+class QuizHistoryCard extends StatelessWidget {
+  const QuizHistoryCard({Key? key, required this.label, required this.points, this.preLast,})
       : super(key: key);
   final String label;
   final int points;
+  final int? preLast;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -51,13 +52,28 @@ class ProfileWidget extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        '$points/8',
-                        style: AppTypography.mainStyle.copyWith(
-                          fontSize: 15.5.w,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.white,
-                        ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${points==0 ? points : 8-points}/8',
+                            style: AppTypography.mainStyle.copyWith(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.white,
+                            ),
+                          ),
+                          if(preLast!=null)Text(
+                            '${preLast==0 ? preLast : 8-preLast!}/8',
+                            style: AppTypography.mainStyle.copyWith(
+                              fontSize: 16.sp,
+                              decoration: TextDecoration.lineThrough,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.white.withOpacity(0.3),
+                            ),
+                          ),
+
+                        ],
                       ),
                       SizedBox(
                         width: 10.w,

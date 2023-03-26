@@ -20,43 +20,43 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
   int currLevel = 0;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg.png'),
-            fit: BoxFit.fill,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: const CustAppBar(),
-          body: SafeArea(
-            minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-            child: Column(
-              children: [
-                DiffButton(
-                  label: 'EASY',
-                  onTap: () => _onTap(level: 'easy'),
-                  isSelected: _difficultySelector() == 0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: DiffButton(
-                    label: 'NORMAL',
-                    onTap: () => _onTap(level: 'normal'),
-                    isSelected: _difficultySelector() == 1,
-                  ),
-                ),
-                DiffButton(
-                  label: 'HARD',
-                  onTap: () => _onTap(level: 'hard'),
-                  isSelected: _difficultySelector() == 2,
-                ),
-              ],
+  Widget build(BuildContext context) => WillPopScope(child: Container(
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/bg.png'),
+        fit: BoxFit.fill,
+      ),
+    ),
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: const CustAppBar(),
+      body: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+        child: Column(
+          children: [
+            DiffButton(
+              label: 'EASY',
+              onTap: () => _onTap(level: 'easy'),
+              isSelected: _difficultySelector() == 0,
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: DiffButton(
+                label: 'NORMAL',
+                onTap: () => _onTap(level: 'normal'),
+                isSelected: _difficultySelector() == 1,
+              ),
+            ),
+            DiffButton(
+              label: 'HARD',
+              onTap: () => _onTap(level: 'hard'),
+              isSelected: _difficultySelector() == 2,
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  ), onWillPop: ()async=>false,);
 
   Color selector(bool isSelected) {
     return isSelected ? AppColors.blue : AppColors.blue.withOpacity(0.5);

@@ -6,17 +6,14 @@ import 'package:pocket_option_expert/res/colors.dart';
 
 class HelperWidget extends StatelessWidget {
   final String label;
+  final VoidCallback? onTap;
 
-  const HelperWidget({Key? key, required this.label}) : super(key: key);
+  const HelperWidget({Key? key, required this.label, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (kDebugMode) {
-          print('impl onPressed');
-        }
-      },
+      onTap: onTap,
       child: Container(
         constraints: BoxConstraints.expand(
           width: 58.sp,

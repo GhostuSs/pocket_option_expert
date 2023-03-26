@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:pocket_option_expert/domain/models/user/user.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 
@@ -63,7 +65,7 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: const Color.fromRGBO(18, 28, 35, 0.1),
             title: RichText(
                 text: TextSpan(
-                    text: '199',
+                    text: (Hive.box<UserModel>('user').values.first.balance??1000).toString(),
                     style: AppTypography.mainStyle.copyWith(
                         fontSize: 17.w,
                         color: AppColors.white,

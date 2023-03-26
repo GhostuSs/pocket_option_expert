@@ -1,12 +1,21 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:pocket_option_expert/domain/models/quiz_question/quiz_question_model.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:pocket_option_expert/domain/models/quiz_history/quiz_his_model.dart';
 import 'package:pocket_option_expert/domain/models/user/user.dart';
 import 'package:pocket_option_expert/mocks.dart';
+import 'package:pocket_option_expert/res/apptypography.dart';
+import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/difficulty/difficulty_screen.dart';
+import 'package:pocket_option_expert/ui/profile/profile_controller/profile_controller.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/quiz_button.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/result_dialog.dart';
 
@@ -15,12 +24,16 @@ class QuizController extends GetxController {
   var currQuiz = Mocks.easyQuizQuestions.obs;
   var currQuestionIndex = 0.obs;
   Timer? timer;
-  String difficulty='Easy';
+  var used = false.obs;
+  String difficulty = 'Easy';
   var time = 0.obs;
-  int wonSum=0;
+  int wonSum = 0;
+  var currBalance = 0.obs;
   int correct = 0;
   int remainSeconds = 1;
+  var userData = Hive.box<UserModel>('user').values.first.obs;
   var answersState = <AnswerState>[].obs;
+  var lock = false.obs;
 
   @override
   void onClose() {
@@ -30,23 +43,30 @@ class QuizController extends GetxController {
     super.onClose();
   }
 
-  void _startTimer(int seconds) {
+  void _startTimer(int seconds, BuildContext context) {
     remainSeconds = seconds;
-    _initTimer();
+    _initTimer(context: context);
   }
 
-
-  Future<void> onAnswerChosen({required int selectedIndx,required BuildContext context,}) async {
-    if(currQuestionIndex.value==0)_startTimer(remainSeconds);
+  Future<void> onAnswerChosen({
+    required int selectedIndx,
+    required BuildContext context,
+  }) async {
+    lock.value = true;
+    used.value=false;
+    final _user = Hive.box<UserModel>('user').values.first;
+    if (currQuestionIndex.value == 0) _startTimer(remainSeconds, context);
     if (selectedIndx + 1 == currQuiz[currQuestionIndex.value].correct) {
       answersState[selectedIndx] = AnswerState.correct;
+      _user.balance = (_user.balance ?? 1000) + 20;
+      wonSum += 20;
+      await Hive.box<UserModel>('user').put('user', _user);
       correct++;
     } else {
       answersState[selectedIndx] = AnswerState.wrong;
     }
     await Future<void>.delayed(
       const Duration(
-        seconds: 1,
         milliseconds: 500,
       ),
     );
@@ -60,12 +80,14 @@ class QuizController extends GetxController {
       currQuestionIndex.value++;
     } else {
       timer?.cancel();
-      showResDialog(context: context);
+      await showResDialog(context: context);
     }
+    lock.value = false;
   }
 
   void initState() {
     chooseDifficulty();
+    currBalance.value = Hive.box<UserModel>('user').values.first.balance ?? 0;
     currQuestionIndex.value = 0;
     answersState.value = [
       AnswerState.active,
@@ -75,45 +97,51 @@ class QuizController extends GetxController {
     ];
   }
 
-  void chooseDifficulty(){
+  void chooseDifficulty() {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
-    difficulty=_diffHive.firstLetterToUpperCase();
+    difficulty = _diffHive.firstLetterToUpperCase();
     _chooseQuiz();
     _chooseTime();
-
   }
 
-  void _chooseQuiz(){
+  void _chooseQuiz() {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
-    switch(_diffHive){
-      case "easy":currQuiz.value=Mocks.easyQuizQuestions;
-      break;
-      case "normal":currQuiz.value=Mocks.normalQuizQuestions;
-      break;
-      case "hard":currQuiz.value=Mocks.hardQuizQuestions;
+    switch (_diffHive) {
+      case "easy":
+        currQuiz.value = Mocks.easyQuizQuestions;
+        break;
+      case "normal":
+        currQuiz.value = Mocks.normalQuizQuestions;
+        break;
+      case "hard":
+        currQuiz.value = Mocks.hardQuizQuestions;
     }
-    currQuestionIndex.value=0;
+    currQuestionIndex.value = 0;
   }
 
-  void _chooseTime(){
+  void _chooseTime() {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
-    if(timer?.isActive==true)timer?.cancel();
-    switch(_diffHive){
-      case "easy":remainSeconds=120;
-      break;
-      case "normal":remainSeconds=400;
-      break;
-      case "hard":remainSeconds=500;
+    if (timer?.isActive == true) timer?.cancel();
+    switch (_diffHive) {
+      case "easy":
+        remainSeconds = 120;
+        break;
+      case "normal":
+        remainSeconds = 400;
+        break;
+      case "hard":
+        remainSeconds = 500;
     }
-    time.value=remainSeconds;
-    currQuestionIndex.value=0;
+    time.value = remainSeconds;
+    currQuestionIndex.value = 0;
   }
 
-  void _initTimer(){
+  void _initTimer({required BuildContext context}) {
     const duration = Duration(seconds: 1);
     timer = Timer.periodic(duration, (timer) {
       if (remainSeconds == 0) {
         timer.cancel();
+        showResDialog(context: context);
       } else {
         remainSeconds--;
       }
@@ -121,9 +149,9 @@ class QuizController extends GetxController {
     });
   }
 
-  void showResDialog({
+  Future<void> showResDialog({
     required BuildContext context,
-  }) {
+  }) async {
     showDialog<void>(
       context: context,
       builder: (c) => ResultDialog(
@@ -131,11 +159,133 @@ class QuizController extends GetxController {
         wonSum: wonSum,
       ),
     );
+    final _user = Hive.box<UserModel>('user').values.first;
+    final currRes = currQuiz.value.length-correct;
+    switch(difficulty.toLowerCase()){
+      case 'easy':_user.easy=QuizHistory(
+        name: 'easy',
+        currRes: currRes>=(_user.easy?.currRes ?? 0) ? currRes : _user.easy?.currRes,
+        prelastRes: _user.easy?.currRes,
+      );
+      break;
+      case 'normal':_user.normal=QuizHistory(
+        name: 'normal',
+        currRes: currRes>=(_user.normal?.currRes ?? 0) ? currRes : _user.normal?.currRes,
+        prelastRes: _user.normal?.currRes,
+      );
+      break;
+      case 'hard':_user.hard=QuizHistory(
+        name: 'hard',
+        currRes: currRes>=(_user.hard?.currRes ?? 0) ? currRes : _user.hard?.currRes,
+        prelastRes: _user.hard?.currRes,
+      );
+      break;
+    }
+    await Hive.box<UserModel>('user').put('user', _user);
+    Get.find<ProfileController>().updateProfile();
+  }
+
+  void showLeaveDialog({required BuildContext context}) {
+    showDialog<void>(
+      context: context,
+      builder: (cont) => BackdropFilter(filter: ImageFilter.blur(sigmaX: 5,sigmaY: 5),child: CupertinoAlertDialog(
+        title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            text: 'Leave the game?',
+            style: AppTypography.mainStyle.copyWith(
+              fontSize: 17.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.black,
+            ),
+          ),
+        ),
+        content: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            text: 'If you exit the game, you will loose everything you earned',
+            style: AppTypography.mainStyle.copyWith(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.black,
+            ),
+          ),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: ()=>Navigator.pop(cont),
+            textStyle: AppTypography.mainStyle.copyWith(
+              fontSize: 17.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue,
+            ),
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(onPressed: (){
+            Navigator.pop(cont);
+            pushNewScreen<void>(context, screen: const DifficultyScreen(),);
+          },
+            textStyle: AppTypography.mainStyle.copyWith(
+              fontSize: 17.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.blue,
+            ),
+            child: Text('Leave'),
+          ),
+        ],
+      ),),
+    );
+  }
+
+
+  Future<void> removeIncorrectAnswer() async {
+    bool found=false;
+    while(!found&&!used.value){
+      final index = Random().nextInt(3);
+      if (kDebugMode) {
+        print(index);
+      }
+      if(index+1!=currQuiz[currQuestionIndex.value].correct){
+        found=true;
+        answersState[index]=AnswerState.disabled;
+        used.value=true;
+      }
+    }
+    userData.value.removeInc=userData.value.removeInc!-1;
+    unawaited(Hive.box<UserModel>('user').put('user', userData.value));
+  }
+
+  Future<void> useFiftyFifty() async {
+    List<bool> found = <bool>[false,false];
+    for(int i=0;i<2;i++){
+      while(!found.every((element) => element==true)&&!used.value){
+        final index = Random().nextInt(3);
+        if (kDebugMode) {
+          print(index);
+        }
+        if(index+1!=currQuiz[currQuestionIndex.value].correct){
+          answersState[index]=AnswerState.disabled;
+          found[i]=true;
+        }
+      }
+    }
+    used.value=true;
+    userData.value.removeInc=userData.value.removeInc!-1;
+    unawaited(Hive.box<UserModel>('user').put('user', userData.value));
+  }
+
+  Future<void> showCorrectAnswer({required BuildContext context}) async {
+    used.value=true;
+    userData.value.show=userData.value.removeInc!-1;
+    await onAnswerChosen(selectedIndx: currQuiz[currQuestionIndex.value].correct!-1, context: context);
   }
 }
 
-extension StringExtension on String{
-  String firstLetterToUpperCase(){
-    return this[0].toUpperCase()+toLowerCase().replaceFirst(this[0], '');
+
+
+extension StringExtension on String {
+  String firstLetterToUpperCase() {
+    return this[0].toUpperCase() + toLowerCase().replaceFirst(this[0], '');
   }
 }

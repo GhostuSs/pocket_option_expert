@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/quiz/state/quiz_controller.dart';
 import 'package:pocket_option_expert/ui/uikit/main_button.dart';
 
 class ResultDialog extends StatelessWidget {
@@ -72,8 +74,8 @@ class ResultDialog extends StatelessWidget {
               MainButton(
                   label: 'Play Again',
                   onTap: () {
-                    //TODO:Implement
-                    debugPrint('implement');
+                    Navigator.pop(context);
+                    Get.find<QuizController>().initState();
                   })
             ],
           ),
