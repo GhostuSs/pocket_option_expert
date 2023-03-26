@@ -63,9 +63,10 @@ class SettingsScreen extends StatelessWidget {
                   height: 23,
                 ),
                 DiffButton(
-                    label: 'CHOICE OF DIFFICULTY LEVEL',
-                    isSelected: true,
-                    onTap: () => pushNewScreen<void>(context,screen:DifficultyScreen()),
+                  label: 'CHOICE OF DIFFICULTY LEVEL',
+                  isSelected: true,
+                  onTap: () =>
+                      pushNewScreen<void>(context, screen: DifficultyScreen()),
                 )
               ],
             ),

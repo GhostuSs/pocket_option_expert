@@ -9,19 +9,25 @@ class QuizButton extends StatelessWidget {
   final String label;
   final AnswerState state;
   final VoidCallback onTap;
+
   const QuizButton({
     Key? key,
     required this.label,
-    required this.state, required this.onTap,
+    required this.state,
+    required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:EdgeInsets.only(bottom: 20.h,),
+      padding: EdgeInsets.only(
+        bottom: 20.h,
+      ),
       child: InkWell(
-        onTap: state==AnswerState.disabled ? null : onTap,
-        borderRadius: BorderRadius.circular(100.r,),
+        onTap: state == AnswerState.disabled ? null : onTap,
+        borderRadius: BorderRadius.circular(
+          100.r,
+        ),
         child: Opacity(
           opacity: _stateOpacity(),
           child: ClipRRect(
@@ -61,14 +67,19 @@ class QuizButton extends StatelessWidget {
       ),
     );
   }
-  double _stateOpacity(){
-    return state==AnswerState.disabled ? 0.3 : 1.0;
+
+  double _stateOpacity() {
+    return state == AnswerState.disabled ? 0.3 : 1.0;
   }
-  Color _colorSelector(){
-    switch(state){
-      case AnswerState.wrong:return AppColors.red;
-      case AnswerState.correct: return AppColors.green;
-      default:return AppColors.white.withOpacity(0.1);
+
+  Color _colorSelector() {
+    switch (state) {
+      case AnswerState.wrong:
+        return AppColors.red;
+      case AnswerState.correct:
+        return AppColors.green;
+      default:
+        return AppColors.white.withOpacity(0.1);
     }
   }
 }

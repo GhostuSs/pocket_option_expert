@@ -16,101 +16,116 @@ class PaywallScreen extends StatelessWidget {
   const PaywallScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context)=>Container(
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/paywall.png')
-      )
-    ),
-    child: Scaffold(
-      backgroundColor: AppColors.bgGray.withOpacity(0.3),
-      body: SafeArea(
-        minimum: EdgeInsets.symmetric(horizontal: 14.w,vertical: 28.h),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: InkWell(
-                onTap: ()=>Get.to<void>(HomeScreen.new),
-                child: Icon(Icons.clear,color: AppColors.white,),
-              ),
-            ),
-            Align(child: SizedBox(
-              height: 100.h,
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: PayWallBadge(label: 'All Quizes', color: AppColors.green),
+  Widget build(BuildContext context) => Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/paywall.png'))),
+        child: Scaffold(
+          backgroundColor: AppColors.bgGray.withOpacity(0.3),
+          body: SafeArea(
+            minimum: EdgeInsets.symmetric(horizontal: 14.w, vertical: 28.h),
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: InkWell(
+                    onTap: () => Get.to<void>(HomeScreen.new),
+                    child: Icon(
+                      Icons.clear,
+                      color: AppColors.white,
+                    ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: PayWallBadge(label: 'Removing ADS', color: AppColors.red),
-                  ),
-                ],
-              ),
-            ),),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  MainButton(label: r'Get premium for $0.99', onTap: ()async{
-                    await Hive.box<bool>('premium').put('premium',true);
-                    await Get.to<void>(HomeScreen.new);
-                  }),
-                SizedBox(height: 24.h,),
-                Padding(
-                padding:EdgeInsets.symmetric(horizontal:5.w),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                InkWell(
-                onTap:()=>launchUrlString(BaseUrls.terms),
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          child: Text('Terms of Use',style: AppTypography.mainStyle.copyWith(
-                              fontWeight:FontWeight.w300,
-                              fontSize:12.w,
-                              color:AppColors.white.withOpacity(0.7)
-                          ),),
+                ),
+                Align(
+                  child: SizedBox(
+                    height: 100.h,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: PayWallBadge(
+                              label: 'All Quizes', color: AppColors.green),
                         ),
-                        InkWell(
-                          onTap:(){},
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          child: Text('Restore',style: AppTypography.mainStyle.copyWith(
-                              fontWeight:FontWeight.w300,
-                              fontSize:12.w,
-                              color:AppColors.white.withOpacity(0.7)
-                          ),),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: PayWallBadge(
+                              label: 'Removing ADS', color: AppColors.red),
                         ),
-                        InkWell(
-                          onTap:()=>launchUrlString(BaseUrls.privacy),
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          child: Text('Privacy Policy',style: AppTypography.mainStyle.copyWith(
-                              fontWeight:FontWeight.w300,
-                              fontSize:12.w,
-                              color:AppColors.white.withOpacity(0.7)
-                          ),),
-                        )
                       ],
                     ),
-                  )
-                ],
-              ),
-            )
-
-          ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      MainButton(
+                          label: r'Get premium for $0.99',
+                          onTap: () async {
+                            await Hive.box<bool>('premium')
+                                .put('premium', true);
+                            await Get.to<void>(HomeScreen.new);
+                          }),
+                      SizedBox(
+                        height: 24.h,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () => launchUrlString(BaseUrls.terms),
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              child: Text(
+                                'Terms of Use',
+                                style: AppTypography.mainStyle.copyWith(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 12.w,
+                                    color: AppColors.white.withOpacity(0.7)),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              child: Text(
+                                'Restore',
+                                style: AppTypography.mainStyle.copyWith(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 12.w,
+                                    color: AppColors.white.withOpacity(0.7)),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () => launchUrlString(BaseUrls.privacy),
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              child: Text(
+                                'Privacy Policy',
+                                style: AppTypography.mainStyle.copyWith(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: 12.w,
+                                    color: AppColors.white.withOpacity(0.7)),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 }

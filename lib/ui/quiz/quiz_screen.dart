@@ -11,7 +11,7 @@ import 'package:pocket_option_expert/ui/quiz/uikit/quiz_button.dart';
 import 'package:pocket_option_expert/ui/shop/ui/shop_screen.dart';
 import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
 
-class QuizScreen extends StatelessWidget{
+class QuizScreen extends StatelessWidget {
   const QuizScreen({super.key});
 
   @override
@@ -24,113 +24,118 @@ class QuizScreen extends StatelessWidget{
       ),
       child: GetBuilder<QuizController>(
         init: _controller,
-        builder: (obj) => Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: CustAppBar(
-            seconds: 120,
-            showLabels: true,
-            action: InkWell(
-              onTap: () =>
-                  pushNewScreen<void>(context, screen: const ShopScreen()),
-              child: Center(
-                child: SvgPicture.asset('assets/images/shop.svg'),
-              ),
-            ),
-          ),
-          body: SafeArea(
-            minimum: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 32,
-            ),
-            child:Obx(()=> Column(
-              children: [
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: _controller
-                        .currQuiz[_controller.currQuestionIndex.value]
-                        .question,
-                    style: AppTypography.mainStyle.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24.sp,
-                      color: AppColors.white,
-                    ),
+        initState: (vm) => _controller.initState(time: 120),
+        builder: (obj) => Obx(() => Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: CustAppBar(
+                seconds: _controller.time.value,
+                showLabels: true,
+                action: InkWell(
+                  onTap: () =>
+                      pushNewScreen<void>(context, screen: const ShopScreen()),
+                  child: Center(
+                    child: SvgPicture.asset('assets/images/shop.svg'),
                   ),
                 ),
-                const SizedBox(
-                  height: 28,
+              ),
+              body: SafeArea(
+                minimum: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 32,
                 ),
-                for (int i = 0;
-                i <
-                    _controller
-                        .currQuiz[_controller.currQuestionIndex.value]
-                        .answers!
-                        .length;
-                i++)
-                  Obx(()=>QuizButton(
-                      label: _controller
-                          .currQuiz[_controller.currQuestionIndex.value]
-                          .answers![i],
-                      state: _controller.answersState[i],
-                      onTap: () async {
-                        await _controller.onAnswerChosen(selectedIndx: i);
-                      }),),
-                const Spacer(),
-                Row(
+                child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        text: _controller
+                            .currQuiz[_controller.currQuestionIndex.value]
+                            .question,
+                        style: AppTypography.mainStyle.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24.sp,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 28,
+                    ),
+                    for (int i = 0;
+                        i <
+                            _controller
+                                .currQuiz[_controller.currQuestionIndex.value]
+                                .answers!
+                                .length;
+                        i++)
+                      QuizButton(
+                          label: _controller
+                              .currQuiz[_controller.currQuestionIndex.value]
+                              .answers![i],
+                          state: _controller.answersState[i],
+                          onTap: () async {
+                            await _controller.onAnswerChosen(
+                              selectedIndx: i,
+                              context: context,
+                            );
+                          }),
+                    const Spacer(),
+                    Row(
                       children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Easy level',
+                                  style: AppTypography.mainStyle.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20.sp,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                const RotatedBox(
+                                  quarterTurns: -1,
+                                  child: Icon(
+                                    Icons.arrow_drop_down_rounded,
+                                    color: AppColors.white,
+                                  ),
+                                )
+                              ],
+                            ),
                             Text(
-                              'Easy level',
+                              '${_controller.currQuestionIndex.value + 1}/${_controller.currQuiz.value.length}',
                               style: AppTypography.mainStyle.copyWith(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 32.sp,
                                 color: AppColors.white,
                               ),
                             ),
-                            const RotatedBox(
-                              quarterTurns: -1,
-                              child: Icon(
-                                Icons.arrow_drop_down_rounded,
-                                color: AppColors.white,
-                              ),
-                            )
                           ],
                         ),
-                        Text(
-                          '${_controller.currQuestionIndex + 1}/${_controller.currQuiz.value.length}',
-                          style: AppTypography.mainStyle.copyWith(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 32.sp,
-                            color: AppColors.white,
+                        const Spacer(),
+                        const HelperWidget(
+                          label: '75/25',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: HelperWidget(
+                            label: '50/50',
                           ),
+                        ),
+                        const HelperWidget(
+                          label: 'SHOW',
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    const HelperWidget(
-                      label: '75/25',
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: HelperWidget(
-                        label: '50/50',
-                      ),
-                    ),
-                    const HelperWidget(
-                      label: 'SHOW',
-                    ),
                   ],
                 ),
-              ],
-            ),),),
-          ),
-        ),
+              ),
+            )),
+      ),
     );
   }
 }

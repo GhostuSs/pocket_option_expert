@@ -8,7 +8,9 @@ import 'package:pocket_option_expert/res/colors.dart';
 class BuyWidget extends StatelessWidget {
   const BuyWidget({
     Key? key,
-    required this.quantity, required this.increment, required this.decrement,
+    required this.quantity,
+    required this.increment,
+    required this.decrement,
   }) : super(key: key);
   final VoidCallback increment;
   final VoidCallback decrement;
@@ -18,7 +20,9 @@ class BuyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _AdditionalButton(onTap: decrement,),
+        _AdditionalButton(
+          onTap: decrement,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: _AdditionalButton(
@@ -31,32 +35,38 @@ class BuyWidget extends StatelessWidget {
     );
   }
 }
-class _AdditionalButton extends StatefulWidget{
-  const _AdditionalButton({required this.onTap, this.isIncrement,});
+
+class _AdditionalButton extends StatefulWidget {
+  const _AdditionalButton({
+    required this.onTap,
+    this.isIncrement,
+  });
+
   final VoidCallback onTap;
   final bool? isIncrement;
-  @override
-  State<StatefulWidget> createState()=>_AdditionalButtonState();
 
+  @override
+  State<StatefulWidget> createState() => _AdditionalButtonState();
 }
 
 class _AdditionalButtonState extends State<_AdditionalButton> {
-
   Timer? timer;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      onLongPress: ()=>timer=Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      onLongPress: () =>
+          timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
         widget.onTap();
       }),
-      onLongPressEnd: (det)=>timer?.cancel(),
+      onLongPressEnd: (det) => timer?.cancel(),
       child: Container(
         constraints: BoxConstraints.expand(width: 64.w, height: 64.w),
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: widget.isIncrement == true ? AppColors.green : AppColors.red),
+            color:
+                widget.isIncrement == true ? AppColors.green : AppColors.red),
         child: Center(
           child: Text(
             widget.isIncrement == true ? '+' : '-',
@@ -69,6 +79,7 @@ class _AdditionalButtonState extends State<_AdditionalButton> {
       ),
     );
   }
+
   @override
   void dispose() {
     timer?.cancel();

@@ -1,13 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:pocket_option_expert/domain/models/user/user.dart';
-import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
-import 'package:pocket_option_expert/ui/home/home_screen.dart';
 import 'package:pocket_option_expert/ui/settings/uikit/difficulty.dart';
 import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
 
@@ -21,6 +15,7 @@ class DifficultyScreen extends StatefulWidget {
 class _DifficultyScreenState extends State<DifficultyScreen> {
   int currInd = 0;
   int currLevel = 0;
+
   @override
   Widget build(BuildContext context) => Container(
         decoration: const BoxDecoration(
@@ -38,20 +33,20 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
               children: [
                 DiffButton(
                   label: 'EASY',
-                  onTap: ()=>_onTap(level: 'easy'),
+                  onTap: () => _onTap(level: 'easy'),
                   isSelected: _difficultySelector() == 0,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: DiffButton(
                     label: 'NORMAL',
-                    onTap: ()=>_onTap(level: 'normal'),
+                    onTap: () => _onTap(level: 'normal'),
                     isSelected: _difficultySelector() == 1,
                   ),
                 ),
                 DiffButton(
                   label: 'HARD',
-                  onTap: ()=>_onTap(level: 'hard'),
+                  onTap: () => _onTap(level: 'hard'),
                   isSelected: _difficultySelector() == 2,
                 ),
               ],
@@ -59,13 +54,14 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
           ),
         ),
       );
+
   Color selector(bool isSelected) {
     return isSelected ? AppColors.blue : AppColors.blue.withOpacity(0.5);
   }
 
   void _onTap({required String level}) async {
     final _user = Hive.box<UserModel>('user').values.first;
-    _user.difficultyLevel=level;
+    _user.difficultyLevel = level;
     await Hive.box<UserModel>('user').put('user', _user);
     Navigator.pop(context);
   }

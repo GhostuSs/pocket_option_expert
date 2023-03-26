@@ -24,7 +24,7 @@ class ShopButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(100),
-      onTap: isSelected ? null :onTap,
+      onTap: isSelected ? null : onTap,
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(

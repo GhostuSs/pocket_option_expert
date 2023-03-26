@@ -6,6 +6,7 @@ import 'package:pocket_option_expert/res/app_theme.dart';
 import 'package:pocket_option_expert/ui/home/home_screen.dart';
 import 'package:pocket_option_expert/ui/paywall/paywall.dart';
 import 'package:pocket_option_expert/ui/quiz/state/quiz_controller.dart';
+import 'package:pocket_option_expert/ui/quiz/uikit/result_dialog.dart';
 import 'package:pocket_option_expert/ui/shop/state/shop_controller.dart';
 
 class EntryPoint extends StatelessWidget {
@@ -15,11 +16,13 @@ class EntryPoint extends StatelessWidget {
   Widget build(BuildContext context) => ScreenUtilInit(
         builder: (_, widget) => GetMaterialApp(
           theme: AppTheme.mainTheme,
-          initialBinding: BindingsBuilder<GetxController>(() {
-            Get..lazyPut<ShopController>(ShopController.new, fenix: true)
-            ..lazyPut<QuizController>(QuizController.new,fenix: true);
+          initialBinding: BindingsBuilder<GetxController>((){
+            Get
+              ..lazyPut<ShopController>(ShopController.new, fenix: true)
+              ..lazyPut<QuizController>(QuizController.new, fenix: true);
           }),
-          home: Hive.box<bool>('premium').values.first == true
+          home:
+          Hive.box<bool>('premium').values.first == true
               ? const HomeScreen()
               : const PaywallScreen(),
         ),

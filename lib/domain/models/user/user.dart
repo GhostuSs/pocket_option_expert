@@ -15,6 +15,7 @@ class UserModel extends HiveObject {
     this.hard,
     this.balance,
   });
+
   @HiveField(0)
   String? difficultyLevel;
   @HiveField(1)

@@ -8,6 +8,7 @@ import 'package:pocket_option_expert/res/colors.dart';
 class MainButton extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
+
   const MainButton({
     Key? key,
     required this.label,

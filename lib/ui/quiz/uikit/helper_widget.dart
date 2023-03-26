@@ -6,6 +6,7 @@ import 'package:pocket_option_expert/res/colors.dart';
 
 class HelperWidget extends StatelessWidget {
   final String label;
+
   const HelperWidget({Key? key, required this.label}) : super(key: key);
 
   @override

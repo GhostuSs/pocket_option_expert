@@ -13,6 +13,7 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.action,
     this.leading,
   });
+
   final bool? showLabels;
   final Widget? leading;
   final Widget? action;
@@ -45,13 +46,19 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                         ])),
                   )
-                : leading!= null ? leading! :null,
+                : leading != null
+                    ? leading!
+                    : null,
             leadingWidth: 80.w,
             actions: [
               Container(
-                constraints: BoxConstraints.expand(width: 56.w,height: 56.w),
-                child: Center(child: action,),
-              ) ?? const SizedBox.shrink()
+                    constraints:
+                        BoxConstraints.expand(width: 56.w, height: 56.w),
+                    child: Center(
+                      child: action,
+                    ),
+                  ) ??
+                  const SizedBox.shrink()
             ],
             backgroundColor: const Color.fromRGBO(18, 28, 35, 0.1),
             title: RichText(
