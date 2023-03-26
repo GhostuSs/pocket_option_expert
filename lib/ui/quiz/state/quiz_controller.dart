@@ -28,15 +28,20 @@ class QuizController extends GetxController {
   String difficulty = 'Easy';
   var time = 0.obs;
   int wonSum = 0;
-  var currBalance = 0.obs;
   int correct = 0;
   int remainSeconds = 1;
   var userData = Hive.box<UserModel>('user').values.first.obs;
-  var answersState = <AnswerState>[].obs;
+  var answersState  = [
+    AnswerState.active,
+    AnswerState.active,
+    AnswerState.active,
+    AnswerState.active
+  ].obs;
   var lock = false.obs;
 
   @override
   void onClose() {
+    debugPrint('close');
     if (timer != null) {
       timer!.cancel();
     }
@@ -86,15 +91,8 @@ class QuizController extends GetxController {
   }
 
   void initState() {
+    debugPrint('initState');
     chooseDifficulty();
-    currBalance.value = Hive.box<UserModel>('user').values.first.balance ?? 0;
-    currQuestionIndex.value = 0;
-    answersState.value = [
-      AnswerState.active,
-      AnswerState.active,
-      AnswerState.active,
-      AnswerState.active
-    ];
   }
 
   void chooseDifficulty() {
@@ -123,13 +121,13 @@ class QuizController extends GetxController {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
     if (timer?.isActive == true) timer?.cancel();
     switch (_diffHive) {
-      case "easy":
+      case 'easy':
         remainSeconds = 120;
         break;
-      case "normal":
+      case 'normal':
         remainSeconds = 400;
         break;
-      case "hard":
+      case 'hard':
         remainSeconds = 500;
     }
     time.value = remainSeconds;

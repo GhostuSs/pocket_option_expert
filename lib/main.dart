@@ -13,6 +13,7 @@ Future<void> main() async {
   await Hive.openBox<bool>('premium');
   await Hive.openBox<UserModel>('user');
   // await Hive.box<UserModel>('user').clear();
+  // await Hive.box<bool>('premium').clear();
   if (Hive.box<bool>('premium').isEmpty == true) {
     await Hive.box<bool>('premium').put('premium', false);
   }

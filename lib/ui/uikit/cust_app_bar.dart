@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hive/hive.dart';
 import 'package:pocket_option_expert/domain/models/user/user.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
@@ -38,15 +39,15 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
                               color: AppColors.white,
                             ),
                             children: [
-                          TextSpan(
-                            text: ' Sec',
-                            style: AppTypography.mainStyle.copyWith(
-                              fontSize: 16.5.w,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.white.withOpacity(0.5),
-                            ),
-                          ),
-                        ])),
+                              TextSpan(
+                                text: ' Sec',
+                                style: AppTypography.mainStyle.copyWith(
+                                  fontSize: 16.5.w,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.white.withOpacity(0.5),
+                                ),
+                              ),
+                            ]),),
                   )
                 : leading != null
                     ? leading!

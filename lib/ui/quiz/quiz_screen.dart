@@ -26,130 +26,130 @@ class QuizScreen extends StatelessWidget {
       child: GetBuilder<QuizController>(
         init: _controller,
         initState: (vm) => _controller.initState(),
-        builder: (obj) => Obx(() => Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: CustAppBar(
-                seconds: _controller.time.value,
-                showLabels: true,
-                action: InkWell(
-                  onTap: () =>
-                      pushNewScreen<void>(context, screen: const ShopScreen()),
-                  child: Center(
-                    child: SvgPicture.asset('assets/images/shop.svg'),
+        builder: (obj) => Obx(()=>Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: CustAppBar(
+            seconds: _controller.time.value,
+            showLabels: true,
+            action: InkWell(
+              onTap: () =>
+                  pushNewScreen<void>(context, screen: const ShopScreen()),
+              child: Center(
+                child: SvgPicture.asset('assets/images/shop.svg'),
+              ),
+            ),
+          ),
+          body: SafeArea(
+            minimum: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 32,
+            ),
+            child: Column(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: _controller
+                        .currQuiz[_controller.currQuestionIndex.value]
+                        .question,
+                    style: AppTypography.mainStyle.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24.sp,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
-              ),
-              body: SafeArea(
-                minimum: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 32,
+                const SizedBox(
+                  height: 28,
                 ),
-                child: Column(
+                for (int i = 0;
+                i <
+                    _controller
+                        .currQuiz[_controller.currQuestionIndex.value]
+                        .answers!
+                        .length;
+                i++)
+                  QuizButton(
+                      label: _controller
+                          .currQuiz[_controller.currQuestionIndex.value]
+                          .answers![i],
+                      locker: i + 1 ==
+                          _controller
+                              .currQuiz[
+                          _controller.currQuestionIndex.value]
+                              .correct &&
+                          _controller.lock.value,
+                      state: _controller.answersState[i],
+                      onTap: () async {
+                        if (!_controller.lock.value) {
+                          await _controller.onAnswerChosen(
+                            selectedIndx: i,
+                            context: context,
+                          );
+                        }
+                      }),
+                const Spacer(),
+                Row(
                   children: [
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: _controller
-                            .currQuiz[_controller.currQuestionIndex.value]
-                            .question,
-                        style: AppTypography.mainStyle.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 28,
-                    ),
-                    for (int i = 0;
-                        i <
-                            _controller
-                                .currQuiz[_controller.currQuestionIndex.value]
-                                .answers!
-                                .length;
-                        i++)
-                      QuizButton(
-                          label: _controller
-                              .currQuiz[_controller.currQuestionIndex.value]
-                              .answers![i],
-                          locker: i + 1 ==
-                                  _controller
-                                      .currQuiz[
-                                          _controller.currQuestionIndex.value]
-                                      .correct &&
-                              _controller.lock.value,
-                          state: _controller.answersState[i],
-                          onTap: () async {
-                            if (!_controller.lock.value) {
-                              await _controller.onAnswerChosen(
-                                selectedIndx: i,
-                                context: context,
-                              );
-                            }
-                          }),
-                    const Spacer(),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () => _controller.timer!=null ? _controller.showLeaveDialog(context: context) :pushNewScreen<void>(context,
-                                    screen: const DifficultyScreen(),),
-                                  child: Text(
-                                    '${_controller.difficulty} level',
-                                    style: AppTypography.mainStyle.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 17.sp,
-                                      color: AppColors.white,
-                                    ),
-                                  ),
+                            InkWell(
+                              onTap: () => _controller.timer!=null ? _controller.showLeaveDialog(context: context) :pushNewScreen<void>(context,
+                                screen: const DifficultyScreen(),),
+                              child: Text(
+                                '${_controller.difficulty} level',
+                                style: AppTypography.mainStyle.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17.sp,
+                                  color: AppColors.white,
                                 ),
-                                const RotatedBox(
-                                  quarterTurns: -1,
-                                  child: Icon(
-                                    Icons.arrow_drop_down_rounded,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            Text(
-                              '${_controller.currQuestionIndex.value + 1}/${_controller.currQuiz.value.length}',
-                              style: AppTypography.mainStyle.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 30.sp,
+                            const RotatedBox(
+                              quarterTurns: -1,
+                              child: Icon(
+                                Icons.arrow_drop_down_rounded,
                                 color: AppColors.white,
                               ),
                             ),
                           ],
                         ),
-                        const Spacer(),
-                        if((_controller.userData.value.removeInc ?? 0)>0)HelperWidget(
-                          label: '75/25',
-                          onTap: _controller.removeIncorrectAnswer,
-                        ),
-                        if((_controller.userData.value.fiftyFifty ?? 0)>0)Padding(
-                          padding: EdgeInsets.symmetric(horizontal:8.sp),
-                          child: HelperWidget(
-                            label: '50/50',
-                            onTap: _controller.useFiftyFifty,
-                          ))else SizedBox(width:16.sp),
-                        if((_controller.userData.value.show ?? 0)>0)HelperWidget(
-                          label: 'SHOW',
-                          onTap: () async =>_controller.showCorrectAnswer(context: context),
+                        Text(
+                          '${_controller.currQuestionIndex.value + 1}/${_controller.currQuiz.value.length}',
+                          style: AppTypography.mainStyle.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 30.sp,
+                            color: AppColors.white,
+                          ),
                         ),
                       ],
                     ),
+                    const Spacer(),
+                    if((_controller.userData.value.removeInc ?? 0)>0)HelperWidget(
+                      label: '75/25',
+                      onTap: _controller.removeIncorrectAnswer,
+                    ),
+                    if((_controller.userData.value.fiftyFifty ?? 0)>0)Padding(
+                        padding: EdgeInsets.symmetric(horizontal:8.sp),
+                        child: HelperWidget(
+                          label: '50/50',
+                          onTap: _controller.useFiftyFifty,
+                        ))else SizedBox(width:16.sp),
+                    if((_controller.userData.value.show ?? 0)>0)HelperWidget(
+                      label: 'SHOW',
+                      onTap: () async =>_controller.showCorrectAnswer(context: context),
+                    ),
                   ],
                 ),
-              ),
-            )),
+              ],
+            ),
+          ),
+        )),
       ),
     );
   }
