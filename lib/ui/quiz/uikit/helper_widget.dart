@@ -19,8 +19,8 @@ class HelperWidget extends StatelessWidget {
       },
       child: Container(
         constraints: BoxConstraints.expand(
-          width: 60.sp,
-          height: 60.sp,
+          width: 58.sp,
+          height: 58.sp,
         ),
         decoration: const BoxDecoration(
           shape: BoxShape.circle,

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:hive/hive.dart';
 import 'package:pocket_option_expert/domain/models/user/user.dart';
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/quiz/state/quiz_controller.dart';
 import 'package:pocket_option_expert/ui/settings/uikit/difficulty.dart';
 import 'package:pocket_option_expert/ui/uikit/cust_app_bar.dart';
 
@@ -63,8 +66,10 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
     final _user = Hive.box<UserModel>('user').values.first;
     _user.difficultyLevel = level;
     await Hive.box<UserModel>('user').put('user', _user);
+    Get.find<QuizController>().chooseDifficulty();
     Navigator.pop(context);
   }
+
 
   int _difficultySelector() {
     switch (Hive.box<UserModel>('user').values.first.difficultyLevel) {
@@ -77,3 +82,4 @@ class _DifficultyScreenState extends State<DifficultyScreen> {
     }
   }
 }
+

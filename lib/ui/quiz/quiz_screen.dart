@@ -24,11 +24,11 @@ class QuizScreen extends StatelessWidget {
       ),
       child: GetBuilder<QuizController>(
         init: _controller,
-        initState: (vm) => _controller.initState(time: 120),
+        initState: (vm) => _controller.initState(),
         builder: (obj) => Obx(() => Scaffold(
               backgroundColor: Colors.transparent,
               appBar: CustAppBar(
-                seconds: _controller.time.value,
+                seconds:_controller.time.value,
                 showLabels: true,
                 action: InkWell(
                   onTap: () =>
@@ -90,10 +90,10 @@ class QuizScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Easy level',
+                                  '${_controller.difficulty} level',
                                   style: AppTypography.mainStyle.copyWith(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 20.sp,
+                                    fontSize: 18.sp,
                                     color: AppColors.white,
                                   ),
                                 ),
