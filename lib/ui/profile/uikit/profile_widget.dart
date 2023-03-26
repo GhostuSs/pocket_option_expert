@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,8 +7,12 @@ import 'package:pocket_option_expert/res/colors.dart';
 import 'package:simple_star_rating/simple_star_rating.dart';
 
 class QuizHistoryCard extends StatelessWidget {
-  const QuizHistoryCard({Key? key, required this.label, required this.points, this.preLast,})
-      : super(key: key);
+  const QuizHistoryCard({
+    Key? key,
+    required this.label,
+    required this.points,
+    this.preLast,
+  }) : super(key: key);
   final String label;
   final int points;
   final int? preLast;
@@ -17,11 +20,12 @@ class QuizHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.blue,
-            ),
-            borderRadius: BorderRadius.circular(99),
-            color: AppColors.white.withOpacity(0.09)),
+          border: Border.all(
+            color: AppColors.blue,
+          ),
+          borderRadius: BorderRadius.circular(99),
+          color: AppColors.white.withOpacity(0.09),
+        ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(99),
           child: BackdropFilter(
@@ -56,23 +60,23 @@ class QuizHistoryCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            '${points==0 ? points : 8-points}/8',
+                            '${points == 0 ? points : 8 - points}/8',
                             style: AppTypography.mainStyle.copyWith(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w900,
                               color: AppColors.white,
                             ),
                           ),
-                          if(preLast!=null)Text(
-                            '${preLast==0 ? preLast : 8-preLast!}/8',
-                            style: AppTypography.mainStyle.copyWith(
-                              fontSize: 16.sp,
-                              decoration: TextDecoration.lineThrough,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.white.withOpacity(0.3),
+                          if (preLast != null)
+                            Text(
+                              '${preLast == 0 ? preLast : 8 - preLast!}/8',
+                              style: AppTypography.mainStyle.copyWith(
+                                fontSize: 16.sp,
+                                decoration: TextDecoration.lineThrough,
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.white.withOpacity(0.3),
+                              ),
                             ),
-                          ),
-
                         ],
                       ),
                       SizedBox(

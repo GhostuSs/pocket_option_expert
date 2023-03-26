@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 
 class HelperWidget extends StatelessWidget {
-  final String label;
-  final VoidCallback? onTap;
 
   const HelperWidget({Key? key, required this.label, this.onTap}) : super(key: key);
+  final String label;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

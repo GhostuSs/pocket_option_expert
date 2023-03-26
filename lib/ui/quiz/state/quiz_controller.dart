@@ -31,7 +31,7 @@ class QuizController extends GetxController {
   int correct = 0;
   int remainSeconds = 1;
   var userData = Hive.box<UserModel>('user').values.first.obs;
-  var answersState  = [
+  var answersState = [
     AnswerState.active,
     AnswerState.active,
     AnswerState.active,
@@ -58,15 +58,15 @@ class QuizController extends GetxController {
     required BuildContext context,
   }) async {
     lock.value = true;
-    used.value=false;
+    used.value = false;
     final _user = Hive.box<UserModel>('user').values.first;
     if (currQuestionIndex.value == 0) _startTimer(remainSeconds, context);
     if (selectedIndx + 1 == currQuiz[currQuestionIndex.value].correct) {
       answersState[selectedIndx] = AnswerState.correct;
       _user.balance = (_user.balance ?? 1000) + 20;
       wonSum += 20;
-      await Hive.box<UserModel>('user').put('user', _user);
       correct++;
+      await Hive.box<UserModel>('user').put('user', _user);
     } else {
       answersState[selectedIndx] = AnswerState.wrong;
     }
@@ -105,13 +105,13 @@ class QuizController extends GetxController {
   void _chooseQuiz() {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
     switch (_diffHive) {
-      case "easy":
+      case 'easy':
         currQuiz.value = Mocks.easyQuizQuestions;
         break;
-      case "normal":
+      case 'normal':
         currQuiz.value = Mocks.normalQuizQuestions;
         break;
-      case "hard":
+      case 'hard':
         currQuiz.value = Mocks.hardQuizQuestions;
     }
     currQuestionIndex.value = 0;
@@ -150,7 +150,7 @@ class QuizController extends GetxController {
   Future<void> showResDialog({
     required BuildContext context,
   }) async {
-    showDialog<void>(
+    await showDialog<void>(
       context: context,
       builder: (c) => ResultDialog(
         scores: correct,
@@ -158,26 +158,35 @@ class QuizController extends GetxController {
       ),
     );
     final _user = Hive.box<UserModel>('user').values.first;
-    final currRes = currQuiz.value.length-correct;
-    switch(difficulty.toLowerCase()){
-      case 'easy':_user.easy=QuizHistory(
-        name: 'easy',
-        currRes: currRes>=(_user.easy?.currRes ?? 0) ? currRes : _user.easy?.currRes,
-        prelastRes: _user.easy?.currRes,
-      );
-      break;
-      case 'normal':_user.normal=QuizHistory(
-        name: 'normal',
-        currRes: currRes>=(_user.normal?.currRes ?? 0) ? currRes : _user.normal?.currRes,
-        prelastRes: _user.normal?.currRes,
-      );
-      break;
-      case 'hard':_user.hard=QuizHistory(
-        name: 'hard',
-        currRes: currRes>=(_user.hard?.currRes ?? 0) ? currRes : _user.hard?.currRes,
-        prelastRes: _user.hard?.currRes,
-      );
-      break;
+    final currRes = currQuiz.length - correct;
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        _user.easy = QuizHistory(
+          name: 'easy',
+          currRes: currRes >= (_user.easy?.currRes ?? 0)
+              ? currRes
+              : _user.easy?.currRes,
+          prelastRes: _user.easy?.currRes,
+        );
+        break;
+      case 'normal':
+        _user.normal = QuizHistory(
+          name: 'normal',
+          currRes: currRes >= (_user.normal?.currRes ?? 0)
+              ? currRes
+              : _user.normal?.currRes,
+          prelastRes: _user.normal?.currRes,
+        );
+        break;
+      case 'hard':
+        _user.hard = QuizHistory(
+          name: 'hard',
+          currRes: currRes >= (_user.hard?.currRes ?? 0)
+              ? currRes
+              : _user.hard?.currRes,
+          prelastRes: _user.hard?.currRes,
+        );
+        break;
     }
     await Hive.box<UserModel>('user').put('user', _user);
     Get.find<ProfileController>().updateProfile();
@@ -186,101 +195,113 @@ class QuizController extends GetxController {
   void showLeaveDialog({required BuildContext context}) {
     showDialog<void>(
       context: context,
-      builder: (cont) => BackdropFilter(filter: ImageFilter.blur(sigmaX: 5,sigmaY: 5),child: CupertinoAlertDialog(
-        title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            text: 'Leave the game?',
-            style: AppTypography.mainStyle.copyWith(
-              fontSize: 17.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.black,
+      builder: (cont) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+        child: CupertinoAlertDialog(
+          title: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: 'Leave the game?',
+              style: AppTypography.mainStyle.copyWith(
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.black,
+              ),
             ),
           ),
+          content: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text:
+                  'If you exit the game, you will loose everything you earned',
+              style: AppTypography.mainStyle.copyWith(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w400,
+                color: AppColors.black,
+              ),
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () => Navigator.pop(cont),
+              textStyle: AppTypography.mainStyle.copyWith(
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w600,
+                color: Colors.blue,
+              ),
+              child: const Text('Cancel'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(cont);
+                pushNewScreen<void>(
+                  context,
+                  screen: const DifficultyScreen(),
+                );
+              },
+              textStyle: AppTypography.mainStyle.copyWith(
+                fontSize: 17.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.blue,
+              ),
+              child: const Text('Leave'),
+            ),
+          ],
         ),
-        content: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            text: 'If you exit the game, you will loose everything you earned',
-            style: AppTypography.mainStyle.copyWith(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w400,
-              color: AppColors.black,
-            ),
-          ),
-        ),
-        actions: [
-          CupertinoDialogAction(
-            isDefaultAction: true,
-            onPressed: ()=>Navigator.pop(cont),
-            textStyle: AppTypography.mainStyle.copyWith(
-              fontSize: 17.sp,
-              fontWeight: FontWeight.w600,
-              color: Colors.blue,
-            ),
-            child: const Text('Cancel'),
-          ),
-          CupertinoDialogAction(onPressed: (){
-            Navigator.pop(cont);
-            pushNewScreen<void>(context, screen: const DifficultyScreen(),);
-          },
-            textStyle: AppTypography.mainStyle.copyWith(
-              fontSize: 17.sp,
-              fontWeight: FontWeight.w400,
-              color: Colors.blue,
-            ),
-            child: Text('Leave'),
-          ),
-        ],
-      ),),
+      ),
     );
   }
 
-
   Future<void> removeIncorrectAnswer() async {
-    bool found=false;
-    while(!found&&!used.value){
+    bool found = false;
+    while (!found && !used.value) {
       final index = Random().nextInt(3);
       if (kDebugMode) {
         print(index);
       }
-      if(index+1!=currQuiz[currQuestionIndex.value].correct){
-        found=true;
-        answersState[index]=AnswerState.disabled;
-        used.value=true;
+      if (index + 1 != currQuiz[currQuestionIndex.value].correct) {
+        found = true;
+        answersState[index] = AnswerState.disabled;
+        used.value = true;
       }
     }
-    userData.value.removeInc=userData.value.removeInc!-1;
+    userData.value.removeInc = userData.value.removeInc! - 1;
     unawaited(Hive.box<UserModel>('user').put('user', userData.value));
   }
 
   Future<void> useFiftyFifty() async {
-    List<bool> found = <bool>[false,false];
-    for(int i=0;i<2;i++){
-      while(!found.every((element) => element==true)&&!used.value){
+    bool found = false;
+    for (int i = 0; i < 2; i++) {
+      found = false;
+      while (!found && !used.value) {
         final index = Random().nextInt(3);
         if (kDebugMode) {
           print(index);
         }
-        if(index+1!=currQuiz[currQuestionIndex.value].correct){
-          answersState[index]=AnswerState.disabled;
-          found[i]=true;
+        if (index + 1 != currQuiz[currQuestionIndex.value].correct) {
+          answersState[index] = AnswerState.disabled;
+          found = true;
         }
       }
     }
-    used.value=true;
-    userData.value.removeInc=userData.value.removeInc!-1;
-    unawaited(Hive.box<UserModel>('user').put('user', userData.value));
+    used.value = true;
+    userData.value.removeInc = userData.value.removeInc! - 1;
+    unawaited(
+      Hive.box<UserModel>('user').put('user', userData.value),
+    );
   }
 
-  Future<void> showCorrectAnswer({required BuildContext context}) async {
-    used.value=true;
-    userData.value.show=userData.value.removeInc!-1;
-    await onAnswerChosen(selectedIndx: currQuiz[currQuestionIndex.value].correct!-1, context: context);
+  Future<void> showCorrectAnswer({
+    required BuildContext context,
+  }) async {
+    used.value = true;
+    userData.value.show = userData.value.removeInc! - 1;
+    await onAnswerChosen(
+        selectedIndx: currQuiz[currQuestionIndex.value].correct! - 1,
+        context: context);
   }
 }
-
-
 
 extension StringExtension on String {
   String firstLetterToUpperCase() {
