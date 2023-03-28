@@ -69,7 +69,7 @@ class QuizHistoryCard extends StatelessWidget {
                           ),
                           if (preLast != null)
                             Text(
-                              '${preLast == 0 ? preLast : 8 - preLast!}/8',
+                              '${preLast == 0 ? preLast : preLast!}/8',
                               style: AppTypography.mainStyle.copyWith(
                                 fontSize: 16.sp,
                                 decoration: TextDecoration.lineThrough,

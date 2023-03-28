@@ -81,7 +81,7 @@ class QuizController extends GetxController {
       AnswerState.active,
       AnswerState.active
     ];
-    if (currQuestionIndex.value + 1 < currQuiz.value.length) {
+    if (currQuestionIndex.value + 1 < currQuiz.length) {
       currQuestionIndex.value++;
     } else {
       timer?.cancel();
@@ -160,29 +160,16 @@ class QuizController extends GetxController {
     final _user = Hive.box<UserModel>('user').values.first;
     switch (difficulty.toLowerCase()) {
       case 'easy':
-        _user.easy = QuizHistory(
-          name: 'easy',
-          currRes: _getCurrBest(historyData: _user.easy)?.currRes,
-          prelastRes: _getPreLastBest(historyData: _user.easy)?.prelastRes,
-        );
+        _user.easy = _correctHistoryResult(lastData: _user.easy!);
         break;
       case 'normal':
-        _user.normal = QuizHistory(
-          name: 'normal',
-          currRes: _getCurrBest(historyData: _user.normal)?.currRes,
-          prelastRes: _getPreLastBest(historyData: _user.normal)?.prelastRes,
-        );
+        _user.normal = _correctHistoryResult(lastData: _user.normal!);
         break;
       case 'hard':
-        _user.hard = QuizHistory(
-          name: 'hard',
-          currRes: _getCurrBest(historyData: _user.hard)?.currRes,
-          prelastRes: _getPreLastBest(historyData: _user.hard)?.prelastRes,
-        );
+        _user.hard = _correctHistoryResult(lastData: _user.hard!);
         break;
     }
-    await Hive.box<UserModel>('user').put('user', _user);
-    Get.find<ProfileController>().updateProfile();
+    Get.find<ProfileController>().updateProfile(user: _user);
   }
 
   void showLeaveDialog({required BuildContext context}) {
@@ -295,38 +282,56 @@ class QuizController extends GetxController {
         context: context);
   }
 
-  QuizHistory? _getCurrBest({required QuizHistory? historyData}){
-    //TODO: Correct
-    QuizHistory? history = historyData;
-    if (kDebugMode) {
-      print(correct);
+  QuizHistory _correctHistoryResult({required QuizHistory lastData}) {
+    if ((lastData.currRes ?? 0) < correct) {
+      if(lastData.currRes!=0){
+        final prelastNew = lastData.currRes;
+        lastData
+          ..prelastRes = prelastNew
+          ..currRes = correct;
+      }else{
+        lastData.currRes=correct;
+      }
+      return lastData;
+    } else {
+      if ((lastData.prelastRes ?? 0) < correct) {
+        lastData.prelastRes = correct;
+      }
+      return lastData;
     }
-    int currentValue = correct;
-    print(currentValue);
-    if((historyData?.currRes ?? 0)<currentValue){
-      history?..prelastRes=historyData?.currRes
-      ..currRes=currentValue;
-      return history;
-    }
-    return history;
   }
 
-  QuizHistory? _getPreLastBest({required QuizHistory? historyData}){
-    //TODO: Correct
-    QuizHistory? history = historyData;
-    int currentValue = correct;
-    print(currentValue);
-    if((historyData?.prelastRes ?? 0)<currentValue){
-      history?.prelastRes=currentValue;
-      return history;
-    }else{
-      if((historyData?.currRes ?? 0)>currentValue){
-        history?.prelastRes=historyData?.currRes;
-      }
-      print('else prelase');
-    }
-    return history;
-  }
+  // QuizHistory? _getCurrBest({required QuizHistory? historyData}){
+  //   //TODO: Correct
+  //
+  //   final QuizHistory? history = historyData;
+  //   if (kDebugMode) {
+  //     print(correct);
+  //   }
+  //   final int currentValue = correct;
+  //   debugPrint(currentValue.toString());
+  //   if((historyData?.currRes ?? 0)<currentValue){
+  //     history?.currRes=currentValue;
+  //     return history;
+  //   }
+  //   return history;
+  // }
+  //
+  // QuizHistory? _getPreLastBest({required QuizHistory? historyData}){
+  //   //TODO: Correct
+  //   final QuizHistory? history = historyData;
+  //   debugPrint(correct.toString());
+  //   if((historyData?.prelastRes ?? 0)<correct){
+  //     history?.prelastRes=correct;
+  //     return history;
+  //   }else{
+  //     // if((historyData?.currRes ?? 0)>currentValue){
+  //     //   history?.prelastRes=historyData?.currRes;
+  //     // }
+  //     debugPrint('else prelase');
+  //   }
+  //   return history;
+  // }
 }
 
 extension StringExtension on String {

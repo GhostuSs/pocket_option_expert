@@ -6,10 +6,6 @@ import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 
 class QuizButton extends StatelessWidget {
-  final String label;
-  final AnswerState state;
-  final VoidCallback onTap;
-  final bool locker;
 
   const QuizButton({
     Key? key,
@@ -17,6 +13,10 @@ class QuizButton extends StatelessWidget {
     required this.state,
     required this.onTap, required this.locker,
   }) : super(key: key);
+  final String label;
+  final AnswerState state;
+  final VoidCallback onTap;
+  final bool locker;
 
   @override
   Widget build(BuildContext context) {
