@@ -40,9 +40,9 @@ class QuizScreen extends StatelessWidget {
             ),
           ),
           body: SafeArea(
-            minimum: const EdgeInsets.symmetric(
+            minimum: EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 32,
+              vertical: 20.h,
             ),
             child: Column(
               children: [
@@ -54,13 +54,13 @@ class QuizScreen extends StatelessWidget {
                         .question,
                     style: AppTypography.mainStyle.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontSize: 24.sp,
+                      fontSize: 23.sp,
                       color: AppColors.white,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 28,
+                SizedBox(
+                  height: 25.h,
                 ),
                 for (int i = 0;
                 i <

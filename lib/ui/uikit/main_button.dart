@@ -35,7 +35,7 @@ class MainButton extends StatelessWidget {
             child: Text(
               label,
               style: AppTypography.mainStyle.copyWith(
-                fontSize: 18.w,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w600,
                 color: AppColors.white,
               ),

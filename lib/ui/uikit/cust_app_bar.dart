@@ -41,7 +41,7 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
                               TextSpan(
                                 text: ' Sec',
                                 style: AppTypography.mainStyle.copyWith(
-                                  fontSize: 16.5.w,
+                                  fontSize: 16.5.sp,
                                   fontWeight: FontWeight.w500,
                                   color: AppColors.white.withOpacity(0.5),
                                 ),
@@ -69,14 +69,14 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
                 text: TextSpan(
                     text: (Get.find<QuizController>().userData.value.balance).toString(),
                     style: AppTypography.mainStyle.copyWith(
-                        fontSize: 17.w,
+                        fontSize: 17.sp,
                         color: AppColors.white,
                         fontWeight: FontWeight.w400),
                     children: [
                       TextSpan(
                           text: ' coins',
                           style: AppTypography.mainStyle.copyWith(
-                              fontSize: 17.w,
+                              fontSize: 17.sp,
                               color: AppColors.blue,
                               fontWeight: FontWeight.w400))
                     ]),)),

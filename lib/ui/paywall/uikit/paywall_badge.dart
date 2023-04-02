@@ -23,7 +23,7 @@ class PayWallBadge extends StatelessWidget {
           child: Text(
             label,
             style: AppTypography.mainStyle.copyWith(
-              fontSize: 14.w,
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: AppColors.white,
             ),

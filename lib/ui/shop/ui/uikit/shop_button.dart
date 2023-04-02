@@ -32,7 +32,7 @@ class ShopButton extends StatelessWidget {
             sigmaX: 8,
           ),
           child: Container(
-            constraints: BoxConstraints.expand(height: 110.h),
+            constraints: BoxConstraints.expand(height: 120.h),
             decoration: BoxDecoration(
               color: AppColors.white.withOpacity(0.1),
               border: Border.all(

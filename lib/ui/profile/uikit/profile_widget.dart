@@ -46,7 +46,7 @@ class QuizHistoryCard extends StatelessWidget {
                       child: Text(
                         label,
                         style: AppTypography.mainStyle.copyWith(
-                          fontSize: 16.w,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w700,
                           color: AppColors.white,
                         ),

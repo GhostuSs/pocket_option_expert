@@ -13,6 +13,7 @@ class EntryPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ScreenUtilInit(
+    minTextAdapt: true,
         builder: (_, widget) => GetMaterialApp(
           theme: AppTheme.mainTheme,
           initialBinding: BindingsBuilder<GetxController>((){

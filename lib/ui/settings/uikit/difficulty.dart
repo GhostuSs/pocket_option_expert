@@ -52,7 +52,7 @@ class DiffButton extends StatelessWidget {
                     label,
                     style: AppTypography.mainStyle.copyWith(
                       fontWeight: FontWeight.w600,
-                      fontSize: 15.w,
+                      fontSize: 15.sp,
                       color: AppColors.white,
                     ),
                   ),

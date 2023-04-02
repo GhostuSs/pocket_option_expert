@@ -39,14 +39,12 @@ class SettingsScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SettingButton(
                         label: 'Terms of Use',
                         onTap: () => launchUrlString(BaseUrls.terms),
                         width: 155.w,
-                      ),
-                      SizedBox(
-                        width: 20.w,
                       ),
                       SettingButton(
                         label: 'Privacy Policy',

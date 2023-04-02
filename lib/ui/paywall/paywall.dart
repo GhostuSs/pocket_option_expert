@@ -19,7 +19,7 @@ class PaywallScreen extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/paywall.png'))),
+                image: AssetImage('assets/images/paywall.png'),fit: BoxFit.cover,),),
         child: Scaffold(
           backgroundColor: AppColors.bgGray.withOpacity(0.3),
           body: SafeArea(
@@ -85,7 +85,7 @@ class PaywallScreen extends StatelessWidget {
                                 'Terms of Use',
                                 style: AppTypography.mainStyle.copyWith(
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 12.w,
+                                    fontSize: 12.sp,
                                     color: AppColors.white.withOpacity(0.7)),
                               ),
                             ),
@@ -99,7 +99,7 @@ class PaywallScreen extends StatelessWidget {
                                 'Restore',
                                 style: AppTypography.mainStyle.copyWith(
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 12.w,
+                                    fontSize: 12.sp,
                                     color: AppColors.white.withOpacity(0.7)),
                               ),
                             ),
@@ -113,7 +113,7 @@ class PaywallScreen extends StatelessWidget {
                                 'Privacy Policy',
                                 style: AppTypography.mainStyle.copyWith(
                                     fontWeight: FontWeight.w300,
-                                    fontSize: 12.w,
+                                    fontSize: 12.sp,
                                     color: AppColors.white.withOpacity(0.7)),
                               ),
                             )
