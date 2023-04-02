@@ -83,7 +83,7 @@ class QuizHistoryCard extends StatelessWidget {
                         width: 10.w,
                       ),
                       SimpleStarRating(
-                        rating: points.toDouble(),
+                        rating: (points/8)*3.toDouble(),
                         starCount: 3,
                         size: 16.w,
                         spacing: 4.w,

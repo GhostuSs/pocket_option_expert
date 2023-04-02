@@ -53,7 +53,7 @@ class QuizController extends GetxController{
   }
 
   Future<void> updateProfile({required UserModel user}) async {
-    await Hive.box<UserModel>('user').put('user', user);
+    unawaited(Hive.box<UserModel>('user').put('user', user));
     userData.value=user;
   }
 
@@ -156,13 +156,6 @@ class QuizController extends GetxController{
   Future<void> showResDialog({
     required BuildContext context,
   }) async {
-    showDialog<void>(
-      context: context,
-      builder: (c) => ResultDialog(
-        scores: correct,
-        wonSum: wonSum,
-      ),
-    );
     final _user = Hive.box<UserModel>('user').values.first;
     switch (difficulty.toLowerCase()) {
       case 'easy':
@@ -175,6 +168,13 @@ class QuizController extends GetxController{
         _user.hard = _correctHistoryResult(lastData: _user.hard!);
         break;
     }
+    unawaited(showDialog<void>(
+      context: context,
+      builder: (c) => ResultDialog(
+        scores: correct,
+        wonSum: wonSum,
+      ),
+    ));
     await updateProfile(user: _user);
   }
 
@@ -256,23 +256,30 @@ class QuizController extends GetxController{
     await Hive.box<UserModel>('user').put('user', userData.value);
   }
 
+
   Future<void> useFiftyFifty() async {
     bool found = false;
+    List<int> removedValue = [];
     for (int i = 0; i < 2; i++) {
       found = false;
       while (!found && !used.value) {
-        final index = Random().nextInt(3);
+
+        int index = Random().nextInt(3);
+        while(removedValue.contains(index)){
+          index = Random().nextInt(3);
+        }
         if (kDebugMode) {
           print(index);
         }
         if (index + 1 != currQuiz[currQuestionIndex.value].correct) {
           answersState[index] = AnswerState.disabled;
+          removedValue.add(index);
           found = true;
         }
       }
     }
     used.value = true;
-    userData.value.removeInc = userData.value.removeInc! - 1;
+    userData.value.fiftyFifty = userData.value.fiftyFifty! - 1;
     await Hive.box<UserModel>('user').put('user', userData.value);
   }
 
@@ -280,7 +287,7 @@ class QuizController extends GetxController{
     required BuildContext context,
   }) async {
     used.value = true;
-    userData.value.show = userData.value.removeInc! - 1;
+    userData.value.show = userData.value.show! - 1;
     await onAnswerChosen(
         selectedIndx: currQuiz[currQuestionIndex.value].correct! - 1,
         context: context);

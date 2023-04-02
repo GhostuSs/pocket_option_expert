@@ -89,7 +89,7 @@ class QuizScreen extends StatelessWidget {
                         }
                       }),
                 const Spacer(),
-                Row(
+                Obx(()=>Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +145,7 @@ class QuizScreen extends StatelessWidget {
                       onTap: () async =>_controller.showCorrectAnswer(context: context),
                     ),
                   ],
-                ),
+                ),),
               ],
             ),
           ),
