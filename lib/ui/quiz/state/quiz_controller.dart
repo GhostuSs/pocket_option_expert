@@ -15,14 +15,14 @@ import 'package:pocket_option_expert/mocks.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
 import 'package:pocket_option_expert/ui/difficulty/difficulty_screen.dart';
-import 'package:pocket_option_expert/ui/profile/profile_controller/profile_controller.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/quiz_button.dart';
 import 'package:pocket_option_expert/ui/quiz/uikit/result_dialog.dart';
 
-class QuizController extends GetxController {
+class QuizController extends GetxController{
   QuizController();
   var currQuiz = Mocks.easyQuizQuestions.obs;
   var currQuestionIndex = 0.obs;
+  var userData = Hive.box<UserModel>('user').values.first.obs;
   Timer? timer;
   var used = false.obs;
   String difficulty = 'Easy';
@@ -30,7 +30,6 @@ class QuizController extends GetxController {
   int wonSum = 0;
   int correct = 0;
   int remainSeconds = 1;
-  var userData = Hive.box<UserModel>('user').values.first.obs;
   var answersState = [
     AnswerState.active,
     AnswerState.active,
@@ -51,6 +50,11 @@ class QuizController extends GetxController {
   void _startTimer(int seconds, BuildContext context) {
     remainSeconds = seconds;
     _initTimer(context: context);
+  }
+
+  Future<void> updateProfile({required UserModel user}) async {
+    await Hive.box<UserModel>('user').put('user', user);
+    userData.value=user;
   }
 
   Future<void> onAnswerChosen({
@@ -90,19 +94,21 @@ class QuizController extends GetxController {
     lock.value = false;
   }
 
-  void initState() {
+  Future<void> initState() async {
+    correct = 0;
+    wonSum = 0;
     debugPrint('initState');
-    chooseDifficulty();
+    await chooseDifficulty();
   }
 
-  void chooseDifficulty() {
+  Future<void> chooseDifficulty() async {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
     difficulty = _diffHive.firstLetterToUpperCase();
-    _chooseQuiz();
+    await _chooseQuiz();
     _chooseTime();
   }
 
-  void _chooseQuiz() {
+  Future<void> _chooseQuiz() async {
     final _diffHive = Hive.box<UserModel>('user').values.first.difficultyLevel!;
     switch (_diffHive) {
       case 'easy':
@@ -136,10 +142,10 @@ class QuizController extends GetxController {
 
   void _initTimer({required BuildContext context}) {
     const duration = Duration(seconds: 1);
-    timer = Timer.periodic(duration, (timer) {
+    timer = Timer.periodic(duration, (timer) async {
       if (remainSeconds == 0) {
         timer.cancel();
-        showResDialog(context: context);
+        await showResDialog(context: context);
       } else {
         remainSeconds--;
       }
@@ -150,7 +156,7 @@ class QuizController extends GetxController {
   Future<void> showResDialog({
     required BuildContext context,
   }) async {
-    await showDialog<void>(
+    showDialog<void>(
       context: context,
       builder: (c) => ResultDialog(
         scores: correct,
@@ -169,7 +175,7 @@ class QuizController extends GetxController {
         _user.hard = _correctHistoryResult(lastData: _user.hard!);
         break;
     }
-    Get.find<ProfileController>().updateProfile(user: _user);
+    await updateProfile(user: _user);
   }
 
   void showLeaveDialog({required BuildContext context}) {
@@ -247,7 +253,7 @@ class QuizController extends GetxController {
       }
     }
     userData.value.removeInc = userData.value.removeInc! - 1;
-    unawaited(Hive.box<UserModel>('user').put('user', userData.value));
+    await Hive.box<UserModel>('user').put('user', userData.value);
   }
 
   Future<void> useFiftyFifty() async {
@@ -267,9 +273,7 @@ class QuizController extends GetxController {
     }
     used.value = true;
     userData.value.removeInc = userData.value.removeInc! - 1;
-    unawaited(
-      Hive.box<UserModel>('user').put('user', userData.value),
-    );
+    await Hive.box<UserModel>('user').put('user', userData.value);
   }
 
   Future<void> showCorrectAnswer({
@@ -282,15 +286,17 @@ class QuizController extends GetxController {
         context: context);
   }
 
-  QuizHistory _correctHistoryResult({required QuizHistory lastData}) {
+  QuizHistory _correctHistoryResult({
+    required QuizHistory lastData,
+  }) {
     if ((lastData.currRes ?? 0) < correct) {
-      if(lastData.currRes!=0){
+      if (lastData.currRes != 0) {
         final prelastNew = lastData.currRes;
         lastData
           ..prelastRes = prelastNew
           ..currRes = correct;
-      }else{
-        lastData.currRes=correct;
+      } else {
+        lastData.currRes = correct;
       }
       return lastData;
     } else {
@@ -300,38 +306,6 @@ class QuizController extends GetxController {
       return lastData;
     }
   }
-
-  // QuizHistory? _getCurrBest({required QuizHistory? historyData}){
-  //   //TODO: Correct
-  //
-  //   final QuizHistory? history = historyData;
-  //   if (kDebugMode) {
-  //     print(correct);
-  //   }
-  //   final int currentValue = correct;
-  //   debugPrint(currentValue.toString());
-  //   if((historyData?.currRes ?? 0)<currentValue){
-  //     history?.currRes=currentValue;
-  //     return history;
-  //   }
-  //   return history;
-  // }
-  //
-  // QuizHistory? _getPreLastBest({required QuizHistory? historyData}){
-  //   //TODO: Correct
-  //   final QuizHistory? history = historyData;
-  //   debugPrint(correct.toString());
-  //   if((historyData?.prelastRes ?? 0)<correct){
-  //     history?.prelastRes=correct;
-  //     return history;
-  //   }else{
-  //     // if((historyData?.currRes ?? 0)>currentValue){
-  //     //   history?.prelastRes=historyData?.currRes;
-  //     // }
-  //     debugPrint('else prelase');
-  //   }
-  //   return history;
-  // }
 }
 
 extension StringExtension on String {

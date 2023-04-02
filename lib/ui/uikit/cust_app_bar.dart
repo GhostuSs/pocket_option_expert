@@ -2,11 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:hive/hive.dart';
-import 'package:pocket_option_expert/domain/models/user/user.dart';
+import 'package:get/get.dart';
 import 'package:pocket_option_expert/res/apptypography.dart';
 import 'package:pocket_option_expert/res/colors.dart';
+import 'package:pocket_option_expert/ui/quiz/state/quiz_controller.dart';
 
 class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustAppBar({
@@ -56,7 +55,7 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
             actions: [
               Container(
                     constraints:
-                        BoxConstraints.expand(width: 56.w, height: 56.w),
+                        BoxConstraints.expand(width: 56.w, height: 56.w,),
                     child: Center(
                       child: action,
                     ),
@@ -64,21 +63,24 @@ class CustAppBar extends StatelessWidget implements PreferredSizeWidget {
                   const SizedBox.shrink()
             ],
             backgroundColor: const Color.fromRGBO(18, 28, 35, 0.1),
-            title: RichText(
+            title: GetBuilder<QuizController>(
+              init: Get.find<QuizController>(),
+              builder: (c)=>Obx(()=>RichText(
                 text: TextSpan(
-                    text: (Hive.box<UserModel>('user').values.first.balance??1000).toString(),
+                    text: (Get.find<QuizController>().userData.value.balance).toString(),
                     style: AppTypography.mainStyle.copyWith(
                         fontSize: 17.w,
                         color: AppColors.white,
                         fontWeight: FontWeight.w400),
                     children: [
-                  TextSpan(
-                      text: ' coins',
-                      style: AppTypography.mainStyle.copyWith(
-                          fontSize: 17.w,
-                          color: AppColors.blue,
-                          fontWeight: FontWeight.w400))
-                ])),
+                      TextSpan(
+                          text: ' coins',
+                          style: AppTypography.mainStyle.copyWith(
+                              fontSize: 17.w,
+                              color: AppColors.blue,
+                              fontWeight: FontWeight.w400))
+                    ]),)),
+            )
           ),
         ),
       );
