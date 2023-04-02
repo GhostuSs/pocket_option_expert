@@ -22,26 +22,26 @@ class ProfileScreen extends StatelessWidget {
           appBar: const CustAppBar(),
           body: SafeArea(
             minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-            child: Column(
+            child: Obx(()=>Column(
               children: [
-                if(controller.userData.value.easy?.currRes!=null)QuizHistoryCard(
+                if(controller.userData.value.easy?.currRes!=0)QuizHistoryCard(
                   label: 'EASY QUIZ',
                   points: controller.userData.value.easy?.currRes ?? 0,
                   preLast: controller.userData.value.easy?.prelastRes,
                 ),
-                if(controller.userData.value.normal?.currRes!=null)Padding(
+                if(controller.userData.value.normal?.currRes!=0)Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: QuizHistoryCard(
                       label: 'NORMAL QUIZ',
                       points: controller.userData.value.normal?.currRes ?? 0,
                       preLast: controller.userData.value.normal?.prelastRes),
                 ),
-                if(controller.userData.value.hard?.currRes!=null)QuizHistoryCard(
+                if(controller.userData.value.hard?.currRes!=0)QuizHistoryCard(
                     label: 'HARD QUIZ',
                     points: controller.userData.value.hard?.currRes ?? 0,
                     preLast: controller.userData.value.hard?.prelastRes)
               ],
-            ),
+            ),),
           ),
         ),
       ),
